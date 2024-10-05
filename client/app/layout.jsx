@@ -1,6 +1,7 @@
 import localFont from "next/font/local";
 import "./globals.css";
-import TanstackProvider from "./provider/tanstackProvider";
+import TanstackProvider from "@/provider/TanstackProvider";
+import { AuthProvider } from "@/provider/AuthProvider";
 
 const estrella = localFont({
   src: "../public/fonts/Estrella.otf",
@@ -29,11 +30,13 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <TanstackProvider>
-        <body
-          className={`${estrella.variable} ${advercaseRegular.variable} ${advercaseBold.variable}`}
-        >
-          {children}
-        </body>
+        <AuthProvider>
+          <body
+            className={`${estrella.variable} ${advercaseRegular.variable} ${advercaseBold.variable}`}
+          >
+            {children}
+          </body>
+        </AuthProvider>
       </TanstackProvider>
     </html>
   );
