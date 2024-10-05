@@ -17,6 +17,7 @@ export default function Page() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ user: user, pwd: pwd }),
+      credentials: "include",
     });
 
     if (response.ok) {

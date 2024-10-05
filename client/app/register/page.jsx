@@ -73,6 +73,7 @@ export default function Page() {
           phone: phone,
           coords: { latitude: latitude, longitude: longitude },
         }),
+        credentials: "include",
       });
 
       if (response.ok) {

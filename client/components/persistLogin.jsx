@@ -11,7 +11,7 @@ const persistLogin = (WrappedComponent) => {
     const [isLoading, setIsLoading] = useState(true);
     const refresh = useRefreshToken();
     const { auth } = useAuth();
-    const [persist] = useLocalStorage("persist", false);
+    const [persist, setPersist] = useLocalStorage("persist", false);
     const router = useRouter();
 
     useEffect(() => {
@@ -22,7 +22,10 @@ const persistLogin = (WrappedComponent) => {
         } catch (error) {
           console.error(error);
         } finally {
-          if (isMounted) setIsLoading(false);
+          if (isMounted) {
+            setIsLoading(false);
+            setPersist(true);
+          }
         }
       };
 
@@ -39,10 +42,15 @@ const persistLogin = (WrappedComponent) => {
       console.log(`Auth Token: ${JSON.stringify(auth?.accessToken)}`);
     }, [isLoading, auth]);
 
+    if (isLoading) {
+      return <div>Loading...</div>; // Show a loading indicator while verifying the token
+    }
+
     if (!persist) {
       router.replace("/login");
       return null;
     }
+
     return <WrappedComponent {...props} />;
   };
 };
