@@ -20,6 +20,6 @@ const flyer = {
   ],
 };
 
-const validUntil = new Date("2024-10-06");
+const validUntil = new Date("2024-10-05");
 
 console.log(JSON.stringify({ seller, flyer, validUntil }));
