@@ -178,8 +178,6 @@ const json = `{
     }
   ]
 }`
-const data = JSON.parse(json);
-
 // const flyers = [
 //   { id: 1, company: "SuperMart", image: "/images/apple.png", expiryDate: "2024-03-15", distance: 2.5 },
 //   { id: 2, company: "TechZone", image: "/placeholder.svg?height=200&width=300", expiryDate: "2024-03-20", distance: 1.8 },
@@ -206,6 +204,10 @@ function haversineDistance(lat1, lon1, lat2, lon2) {
 }
 
 export default function FlyerGrid() {
+  const data = JSON.parse(json);
+  console.log(data);
+  const flyers = data.flyers;
+
   // Location
   const [coordinates, setCoordinates] = useState({ latitude: null, longitude: null });
   const [error, setError] = useState(null);
@@ -234,14 +236,14 @@ export default function FlyerGrid() {
 
   const [sortBy, setSortBy] = useState("expiryDate")
 
-  const sortedFlyers = [...flyers].sort((a, b) => {
-    if (sortBy === "expiryDate") {
-      return new Date(a.expiryDate).getTime() - new Date(b.expiryDate).getTime()
-    } else if (sortBy === "distance") {
-      return a.distance - b.distance
-    }
-    return 0
-  })
+  // const sortedFlyers = [...flyers].sort((a, b) => {
+  //   if (sortBy === "expiryDate") {
+  //     return new Date(a.expiryDate).getTime() - new Date(b.expiryDate).getTime()
+  //   } else if (sortBy === "distance") {
+  //     return a.distance - b.distance
+  //   }
+  //   return 0
+  // })
 
   return (
     <>
@@ -259,23 +261,23 @@ export default function FlyerGrid() {
         </Select>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-10">
-        {sortedFlyers.map((flyer) => (
-          <Card key={flyer.id} className="overflow-hidden">
+        {flyers.map((flyer) => (
+          <Card key={flyer._id} className="overflow-hidden">
             <CardHeader>
-              <CardTitle>{flyer.company}</CardTitle>
+              <CardTitle>{flyer.seller.store}</CardTitle>
             </CardHeader>
             <CardContent className="p-0">
               <Image
                 src={flyer.image}
-                alt={`${flyer.company} flyer`}
+                alt={`${flyer.store}'s flyer`}
                 width={300}
                 height={200}
                 className="w-full h-48 object-cover"
               />
             </CardContent>
             <CardFooter className="flex justify-between">
-              <span className="text-sm text-gray-400">Expires: {flyer.expiryDate}</span>
-              <span className="text-sm text-gray-400">{flyer.distance.toFixed(1)} km away</span>
+              <span className="text-sm text-gray-400">Expires: {flyer.validUntil}</span>
+              
             </CardFooter>
           </Card>
         ))}
