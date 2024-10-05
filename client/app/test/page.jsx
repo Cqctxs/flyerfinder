@@ -1,7 +1,7 @@
 'use client';
 
-import FlyerSquareOne from "@/public/components/flyer-square-one";
-import withAuth from "@/public/components/withAuth";
+import FlyerSquareOne from "@/components/flyer-square-one";
+import withAuth from "@/components/withAuth";
 
 const test = () => {
   return (

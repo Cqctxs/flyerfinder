@@ -1,38 +1,10 @@
-import NavButton from "@/public/components/navbutton";
+import Navigation from "@/components/navigation";
 import Image from "next/image";
-import Link from "next/link";
-import { BadgePlus, Search } from 'lucide-react';
 
 export default function Home() {
   return (
     <>
-      <nav className="sticky top-0 w-full flex justify-between items-center p-4 shadow-md z-50 bg-black/20 backdrop-blur-lg rounded-xl">
-        <div className="m-2">
-          <Link href="/" className='block p-2'>
-            <div className="flex items-center justify-center">
-              <Image src="/images/logo.png" alt="Logo" width={50} height={50} />
-            </div>
-          </Link>
-        </div>
-        <div className="flex justify-normal">
-        <div className="m-2">
-          <Link href="/create" className='block bg-black/20 text-white p-2 rounded-full hover:bg-black/60 transition-colors duration-300'>
-            <div className="flex items-center justify-center">
-              <BadgePlus className="h-8 w-8" />
-            </div>
-          </Link>
-        </div>
-        <div className="m-2">
-          <Link href="/browse" className='block bg-black/20 text-white p-2 rounded-full hover:bg-black/60 transition-colors duration-300'>
-            <div className="flex items-center justify-center">
-              <Search className="h-8 w-8" />
-            </div>
-          </Link>
-        </div>
-        </div>
-
-
-      </nav>
+      <Navigation />
       <div className="w-full h-screen flex flex-col">
         <Image src="/images/farm.png" alt="Cover Image" fill={true} className="absolute top-0 left-0 w-full h-full bg-cover -z-10" />
         <div className="flex flex-col flex-grow relative items-center justify-center">
@@ -42,10 +14,22 @@ export default function Home() {
           </div>
         </div>
       </div>
-      <div className="w-full h-screen flex flex-col">
-        <Image src="/images/farm.png" alt="Cover Image" fill={true} className="absolute top-0 left-0 w-full h-full bg-cover -z-10" />
-        <div className="flex flex-col flex-grow relative items-center justify-center">
-          <div className="font-advercase text-9xl p-10 bg-black/20 backdrop-blur-lg rounded-3xl text-white/70">Flyer Finder</div>
+      <div className='h-screen w-full'>
+        <div className="font-advercase text-5xl p-10 text-center">
+          Flyer Finder is your one-stop shop for local deals and digital flyers. Say goodbye to paper clutter and hello to a more sustainable way to find savings!
+          <div className="font-sans text-4xl mt-10 text-left ml-10">
+            With Flyer Finder, you can:
+          </div>
+          <ul className="font-sans list-disc list-inside text-2xl mt-4 text-left ml-14">
+            <li>Browse digital flyers: Easily access flyers from your favorite local businesses, all in one place.</li>
+            <li>Discover exclusive deals: Uncover hidden gems and special offers you won't find anywhere else.</li>
+            <li>Save paper, save trees: Reduce your environmental impact by choosing digital flyers.</li>
+            <li>Enjoy secure and verifiable flyers: Our blockchain technology ensures flyers are authentic and tamper-proof.</li>
+            <li>Support local businesses: Connect with businesses in your community and discover new places to shop.</li>
+          </ul>
+          <div className="text-5xl mt-10">
+            Use Flyer Finder today and start exploring a world of savings while helping the planet!
+          </div>
         </div>
       </div>
     </>
