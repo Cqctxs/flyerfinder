@@ -23,7 +23,7 @@ export default function Page() {
       const result = await response.json();
       console.log(result);
       setAuth({ user: result.user, phone: result.phone, coords: result.coords, accessToken: result.accessToken });
-      router.push("/test"); // Redirect to /test after successful login
+      router.push("/create"); // Redirect to /create after successful login
     }
   };
 
