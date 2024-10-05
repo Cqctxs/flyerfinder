@@ -1,5 +1,6 @@
 import localFont from "next/font/local";
 import "./globals.css";
+import TanstackProvider from "./provider/tanstackProvider";
 
 const estrella = localFont({
   src: "../public/fonts/Estrella.otf",
@@ -27,11 +28,13 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body
-        className={`${estrella.variable} ${advercaseRegular.variable} ${advercaseBold.variable}`}
-      >
-        {children}
-      </body>
+      <TanstackProvider>
+        <body
+          className={`${estrella.variable} ${advercaseRegular.variable} ${advercaseBold.variable}`}
+        >
+          {children}
+        </body>
+      </TanstackProvider>
     </html>
   );
 }
