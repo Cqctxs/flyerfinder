@@ -10,10 +10,13 @@ const userSchema = new Schema({
         type: String,
         required: true
     },
-    phone: String,
+    phone: {
+        type: String,
+        required: true
+    },
     coordinates: {
-        lat: Number,
-        lng: Number
+        type: Object,
+        required: true
     },
     refreshToken: String,
 });

@@ -34,7 +34,7 @@ export default function Page() {
         type="text"
         value={user}
         onChange={(e) => setUser(e.target.value)}
-        placeholder="User"
+        placeholder="Email"
       />
       <input
         type="password"

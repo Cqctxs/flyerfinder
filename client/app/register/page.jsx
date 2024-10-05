@@ -77,7 +77,6 @@ export default function Page() {
       });
 
       if (response.ok) {
-        setSuccess(true);
         router.push("/login"); // Redirect to /login after successful registration
       } else {
         setError("Registration failed");
