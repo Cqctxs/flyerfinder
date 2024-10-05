@@ -11,6 +11,11 @@ module.exports = {
         background: "var(--background)",
         foreground: "var(--foreground)",
       },
+      fontFamily: {
+        estrella: ['var(--font-estrella)'],
+        advercase: ['var(--font-advercase-regular)'],
+        advercaseBold: ['var(--font-advercase-bold)'],
+      },
     },
   },
   plugins: [],
