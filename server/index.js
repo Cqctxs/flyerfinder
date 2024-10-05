@@ -23,6 +23,8 @@ app.enable("trust proxy");
 app.disable("x-powered-by");
 connectDB();
 
+app.use(express.static("public"));
+
 app.use("/flyer", require("./routes/flyer"));
 app.use("/api/filter", require("./routes/api/filter"));
 
