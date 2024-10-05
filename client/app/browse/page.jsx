@@ -30,7 +30,7 @@ export default function FlyerGrid() {
 
   return (
     <>
-    <Navigation />
+      <Navigation />
       <div className="flex justify-end mb-4">
         <Select onValueChange={(value) => setSortBy(value)}>
           <SelectTrigger className="w-[180px]">
