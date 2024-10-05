@@ -2,7 +2,8 @@ import FlyerSquareOne from "@/public/components/flyer-square-one";
 
 export default function test(){
     return (
-        <div className="flex justify-between">
+        // use grid instead of flex!
+         <div className="flex justify-between">
             <FlyerSquareOne/>
             <FlyerSquareOne/>
             <FlyerSquareOne/>

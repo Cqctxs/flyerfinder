@@ -5,6 +5,9 @@ const path = require("path");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const connectDB = require("./config/connectMongo");
+const verifyJWT = require("./middleware/verifyJWT");
+const cookieParser = require("cookie-parser");
+const credentials = require("./middleware/credentials");
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -14,8 +17,11 @@ const corsOptions = {
   origin: process.env.CORS_ORIGIN || "*", // Replace with your allowed origins
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   allowedHeaders: "Content-Type,Authorization",
+  credentials: true, // Allow credentials
 };
 
+app.use(credentials);
+app.use(cookieParser());
 app.use(cors(corsOptions));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json({ strict: true }));
@@ -25,8 +31,13 @@ connectDB();
 
 app.use(express.static("public"));
 
-app.use("/flyer", require("./routes/flyer"));
-app.use("/api/filter", require("./routes/api/filter"));
+app.use("/register", require("./routes/register"));
+app.use("/login", require("./routes/login"));
+app.use("/refresh", require("./routes/refresh"));
+app.use("/logout", require("./routes/logout"));
+
+app.use("/flyer", verifyJWT, require("./routes/flyer"));
+app.use("/api/filter", verifyJWT, require("./routes/api/filter"));
 
 // 404 middleware
 app.use((req, res, next) => {
