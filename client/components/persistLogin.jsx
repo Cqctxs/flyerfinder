@@ -11,6 +11,9 @@ const persistLogin = (WrappedComponent) => {
     const [isLoading, setIsLoading] = useState(true);
     const refresh = useRefreshToken();
     const { auth } = useAuth();
+    if (auth.accessToken !== "") {
+        return null;
+    }
     const [persist, setPersist] = useLocalStorage("persist", false);
     const router = useRouter();
 

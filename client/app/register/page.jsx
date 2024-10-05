@@ -97,36 +97,42 @@ export default function Page() {
           onChange={(e) => setEmail(e.target.value)}
           placeholder="Email"
         />
+        {validEmail ? null : <p>Invalid email</p>}
         <input
           type="password"
           value={pwd}
           onChange={(e) => setPwd(e.target.value)}
           placeholder="Password"
         />
+        {validPwd ? null : <p>Invalid password</p>}
         <input
           type="password"
           value={matchPwd}
           onChange={(e) => setMatchPwd(e.target.value)}
           placeholder="Match Password"
         />
+        {validMatch ? null : <p>Passwords do not match</p>}
         <input
           type="text"
           value={phone}
           onChange={(e) => setPhone(e.target.value)}
           placeholder="Phone Number"
         />
+        {validPhone ? null : <p>Invalid phone number</p>}
         <input
           type="text"
           value={latitude}
           onChange={(e) => setLatitude(e.target.value)}
           placeholder="Latitude of Address"
         />
+        {validLatitude ? null : <p>Invalid latitude</p>}
         <input
           type="text"
           value={longitude}
           onChange={(e) => setLongitude(e.target.value)}
           placeholder="Longitude of Address"
         />
+        {validLongitude ? null : <p>Invalid longitude</p>}
         <button onClick={register}>Register</button>
         <p>{error}</p>
         <p>

@@ -13,10 +13,8 @@ const handleLogin = async (req, res) => {
   // evaluate password
   const match = await bcrypt.compare(pwd, foundUser.password);
   if (match) {
-    const phone = Object.values(foundUser.phone);
-    const coords = Object.values(foundUser.coordinates);
-    const id = foundUser._id;
-    const completed = foundUser.completed;
+    const phone = foundUser.phone;
+    const coords = foundUser.coordinates;
     // create JWTs
     const accessToken = jwt.sign(
       {
@@ -46,7 +44,7 @@ const handleLogin = async (req, res) => {
       secure: false,
       maxAge: 24 * 60 * 60 * 1000,
     });
-    res.json({ id, completed, accessToken });
+    res.json({ user, phone, coords, accessToken });
   } else {
     res.sendStatus(401);
   }
