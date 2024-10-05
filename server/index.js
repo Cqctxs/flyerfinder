@@ -36,8 +36,8 @@ app.use("/login", require("./routes/login"));
 app.use("/refresh", require("./routes/refresh"));
 app.use("/logout", require("./routes/logout"));
 
-app.use("/flyer", verifyJWT, require("./routes/flyer"));
-app.use("/api/filter", verifyJWT, require("./routes/api/filter"));
+app.use("/flyer", require("./routes/flyer"));
+app.use("/api/filter", require("./routes/api/filter"));
 
 // 404 middleware
 app.use((req, res, next) => {

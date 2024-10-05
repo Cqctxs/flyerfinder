@@ -17,6 +17,7 @@ export default function Page() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ user: user, pwd: pwd }),
+      credentials: "include",
     });
 
     if (response.ok) {
@@ -33,7 +34,7 @@ export default function Page() {
         type="text"
         value={user}
         onChange={(e) => setUser(e.target.value)}
-        placeholder="User"
+        placeholder="Email"
       />
       <input
         type="password"
