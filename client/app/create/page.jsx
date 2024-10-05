@@ -14,7 +14,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Card, CardContent } from "@/components/ui/card";
-import withAuth from "@/components/withAuth";
+
+import Navigation from "@/components/navigation";
 
 // Mock product data
 const products = [
@@ -54,6 +55,7 @@ const Page = () => {
 
     return (
       <div key={index} className="space-y-2">
+
         <Select
           onValueChange={(value) => handleProductSelect(index, parseInt(value))}
         >
@@ -92,66 +94,70 @@ const Page = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-4 space-y-6">
-      <div className="space-y-2">
-        <Label htmlFor="total-pages">Number of Pages</Label>
-        <Input
-          id="total-pages"
-          type="number"
-          min="1"
-          value={totalPages}
-          onChange={(e) => setTotalPages(parseInt(e.target.value))}
-        />
-      </div>
+    <>
+      <Navigation />
+      <div className="max-w-4xl mx-auto p-4 space-y-6">
+        <h1 className="font-advercase text-4xl font-semibold">Create Flyer</h1>
+        <div className="space-y-2">
+          <Label htmlFor="total-pages" className="text-xl">Number of Pages</Label>
+          <Input
+            id="total-pages"
+            type="number"
+            min="1"
+            value={totalPages}
+            onChange={(e) => setTotalPages(parseInt(e.target.value))}
+          />
+        </div>
 
-      <div className="space-y-2">
-        <Label htmlFor="page-type">Items per Page</Label>
-        <Select value={pageType} onValueChange={setPageType}>
-          <SelectTrigger id="page-type">
-            <SelectValue placeholder="Select items per page" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="2">2 items</SelectItem>
-            <SelectItem value="4">4 items</SelectItem>
-            <SelectItem value="6">6 items</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
+        <div className="space-y-2">
+          <Label htmlFor="page-type" className="text-xl">Items per Page</Label>
+          <Select value={pageType} onValueChange={setPageType}>
+            <SelectTrigger id="page-type">
+              <SelectValue placeholder="Select items per page" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="2">2 items</SelectItem>
+              <SelectItem value="4">4 items</SelectItem>
+              <SelectItem value="6">6 items</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
 
-      <div className="space-y-4">
-        <h2 className="text-2xl font-bold">
-          Page {currentPage} of {totalPages}
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {Array.from({ length: parseInt(pageType) }, (_, i) =>
-            renderProductSelector(i)
+        <div className="space-y-4">
+          <h2 className="text-xl font-bold">
+            Page {currentPage} of {totalPages}
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {Array.from({ length: parseInt(pageType) }, (_, i) =>
+              renderProductSelector(i)
+            )}
+          </div>
+        </div>
+
+        <div className="flex justify-between items-center">
+          <Button
+            onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
+            disabled={currentPage === 1}
+          >
+            <ChevronLeft className="mr-2 h-4 w-4" /> Previous
+          </Button>
+          {currentPage === totalPages ? (
+            <Button onClick={() => console.log("Submit flyer")}>
+              Submit Flyer
+            </Button>
+          ) : (
+            <Button
+              onClick={() =>
+                setCurrentPage((prev) => Math.min(totalPages, prev + 1))
+              }
+              disabled={currentPage === totalPages}
+            >
+              Next <ChevronRight className="ml-2 h-4 w-4" />
+            </Button>
           )}
         </div>
       </div>
-
-      <div className="flex justify-between items-center">
-        <Button
-          onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
-          disabled={currentPage === 1}
-        >
-          <ChevronLeft className="mr-2 h-4 w-4" /> Previous
-        </Button>
-        {currentPage === totalPages ? (
-          <Button onClick={() => console.log("Submit flyer")}>
-            Submit Flyer
-          </Button>
-        ) : (
-          <Button
-            onClick={() =>
-              setCurrentPage((prev) => Math.min(totalPages, prev + 1))
-            }
-            disabled={currentPage === totalPages}
-          >
-            Next <ChevronRight className="ml-2 h-4 w-4" />
-          </Button>
-        )}
-      </div>
-    </div>
+    </>
   );
 }
 
