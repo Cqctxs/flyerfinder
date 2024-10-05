@@ -1,22 +1,31 @@
-import axios from '../api/axios';
-import useAuth from './useAuth';
+import useAuth from "./useAuth";
 
 const useRefreshToken = () => {
-    const { setAuth } = useAuth();
+  const { setAuth } = useAuth();
 
-    const refresh = async () => {
-        const response = await axios.get('/refresh', {
-            withCredentials: true
-        });
-        setAuth({
-                user: response.data.user,
-                completed: response.data.completed,
-                accessToken: response.data.accessToken,
-            }
-        );
-        return response.data.accessToken;
+  const refresh = async () => {
+    const response = await fetch("/refresh", {
+      method: "GET",
+      credentials: "include",
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to refresh token");
     }
-    return refresh;
+
+    const data = await response.json();
+
+    setAuth({
+      user: data.user,
+      phone: data.phone,
+      coords: data.coords,
+      accessToken: data.accessToken,
+    });
+
+    return data.accessToken;
+  };
+
+  return refresh;
 };
 
 export default useRefreshToken;
