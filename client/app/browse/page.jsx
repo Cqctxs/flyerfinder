@@ -1,22 +1,237 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Image from "next/image"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import Navigation from "@/components/navigation"
 
 // Mock data for flyers
-const flyers = [
-  { id: 1, company: "SuperMart", image: "/placeholder.svg?height=200&width=300", expiryDate: "2024-03-15", distance: 2.5 },
-  { id: 2, company: "TechZone", image: "/placeholder.svg?height=200&width=300", expiryDate: "2024-03-20", distance: 1.8 },
-  { id: 3, company: "FashionHub", image: "/placeholder.svg?height=200&width=300", expiryDate: "2024-03-18", distance: 3.2 },
-  { id: 4, company: "HomeDecor", image: "/placeholder.svg?height=200&width=300", expiryDate: "2024-03-25", distance: 0.9 },
-  { id: 5, company: "PetSupplies", image: "/placeholder.svg?height=200&width=300", expiryDate: "2024-03-22", distance: 4.1 },
-  { id: 6, company: "SportsGear", image: "/placeholder.svg?height=200&width=300", expiryDate: "2024-03-17", distance: 2.7 },
-]
+const json = `{
+  "success": true,
+  "flyers": [
+    {
+      "_id": "6700db91fd9bee496318c2e5",
+      "seller": {
+        "store": "John's Store",
+        "name": "John Doe",
+        "phone": "555-555-5555",
+        "email": "johndoe@email.com",
+        "coordinates": {
+          "lat": 43.77030841676703,
+          "lon": -79.18480033176169
+        }
+      },
+      "flyer": {
+        "pages": [
+          {
+            "type": 0,
+            "items": [
+              {
+                "name": "Organic Apples",
+                "price": 3.99,
+                "image": "https://example.com/apples.jpg"
+              }
+            ]
+          },
+          {
+            "type": 0,
+            "items": [
+              {
+                "name": "Organic Bananas",
+                "price": 1.99,
+                "image": "https://example.com/apples.jpg"
+              }
+            ]
+          }
+        ]
+      },
+      "validUntil": "2024-10-10T00:00:00.000Z",
+      "__v": 0
+    },
+    {
+      "_id": "6700dbdf79b45f34b8123392",
+      "seller": {
+        "store": "John's Store",
+        "name": "John Doe",
+        "phone": "555-555-5555",
+        "email": "johndoe@email.com",
+        "coordinates": {
+          "lat": 43.77319084068962,
+          "lon": -79.16688069831774
+        }
+      },
+      "flyer": {
+        "pages": [
+          {
+            "type": 0,
+            "items": [
+              {
+                "name": "Organic Apples",
+                "price": 2.99,
+                "image": "https://example.com/apples.jpg"
+              }
+            ]
+          },
+          {
+            "type": 0,
+            "items": [
+              {
+                "name": "Organic Bananas",
+                "price": 2.99,
+                "image": "https://example.com/apples.jpg"
+              }
+            ]
+          }
+        ]
+      },
+      "validUntil": "2024-10-10T00:00:00.000Z",
+      "__v": 0
+    },
+    {
+      "_id": "6700dc39aef25994e38ade89",
+      "seller": {
+        "store": "John's Store",
+        "name": "John Doe",
+        "phone": "555-555-5555",
+        "email": "johndoe@email.com",
+        "coordinates": {
+          "lat": 43.807244912657715,
+          "lon": -79.22407422493382
+        }
+      },
+      "flyer": {
+        "pages": [
+          {
+            "type": 1,
+            "items": [
+              {
+                "name": "Organic Apples",
+                "price": 1.99,
+                "image": "https://example.com/apples.jpg"
+              },
+              {
+                "name": "Organic Peaches",
+                "price": 2.99,
+                "image": "https://example.com/apples.jpg"
+              }
+            ]
+          },
+          {
+            "type": 0,
+            "items": [
+              {
+                "name": "Organic Bananas",
+                "price": 2.99,
+                "image": "https://example.com/apples.jpg"
+              }
+            ]
+          }
+        ]
+      },
+      "validUntil": "2024-10-10T00:00:00.000Z",
+      "__v": 0
+    },
+    {
+      "_id": "670133d0160cac7e78b6b130",
+      "seller": {
+        "store": "John's Store",
+        "name": "John Doe",
+        "phone": "555-555-5555",
+        "email": "johndoe@email.com",
+        "coordinates": {
+          "lat": 43.807244912657715,
+          "lon": -79.22407422493382
+        }
+      },
+      "flyer": {
+        "pages": [
+          {
+            "type": 1,
+            "items": [
+              {
+                "name": "Organic Apples",
+                "price": 4.99,
+                "image": "https://example.com/apples.jpg"
+              },
+              {
+                "name": "Organic Peaches",
+                "price": 4.99,
+                "image": "https://example.com/apples.jpg"
+              }
+            ]
+          },
+          {
+            "type": 0,
+            "items": [
+              {
+                "name": "Organic Bananas",
+                "price": 4.99,
+                "image": "https://example.com/apples.jpg"
+              }
+            ]
+          }
+        ]
+      },
+      "validUntil": "2024-10-10T00:00:00.000Z",
+      "__v": 0
+    }
+  ]
+}`
+const data = JSON.parse(json);
+
+// const flyers = [
+//   { id: 1, company: "SuperMart", image: "/images/apple.png", expiryDate: "2024-03-15", distance: 2.5 },
+//   { id: 2, company: "TechZone", image: "/placeholder.svg?height=200&width=300", expiryDate: "2024-03-20", distance: 1.8 },
+//   { id: 3, company: "FashionHub", image: "/placeholder.svg?height=200&width=300", expiryDate: "2024-03-18", distance: 3.2 },
+//   { id: 4, company: "HomeDecor", image: "/placeholder.svg?height=200&width=300", expiryDate: "2024-03-25", distance: 0.9 },
+//   { id: 5, company: "PetSupplies", image: "/placeholder.svg?height=200&width=300", expiryDate: "2024-03-22", distance: 4.1 },
+//   { id: 6, company: "SportsGear", image: "/placeholder.svg?height=200&width=300", expiryDate: "2024-03-17", distance: 2.7 },
+
+// ]
+
+function haversineDistance(lat1, lon1, lat2, lon2) {
+  const toRadians = (degrees) => degrees * (Math.PI / 180);
+
+  const R = 6371; // Earth's radius in kilometers
+  const dLat = toRadians(lat2 - lat1);
+  const dLon = toRadians(lon2 - lon1);
+  const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos(toRadians(lat1)) * Math.cos(toRadians(lat2)) *
+            Math.sin(dLon / 2) * Math.sin(dLon / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  const distance = R * c; // Distance in kilometers
+
+  return distance;
+}
 
 export default function FlyerGrid() {
+  // Location
+  const [coordinates, setCoordinates] = useState({ latitude: null, longitude: null });
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const getLocation = () => {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            setCoordinates({
+              latitude: position.coords.latitude,
+              longitude: position.coords.longitude,
+            });
+          },
+          (error) => {
+            setError(error.message);
+          }
+        );
+      } else {
+        setError('Geolocation is not supported by this browser.');
+      }
+    };
+    getLocation();
+  }, []);
+  console.log(coordinates);
+
   const [sortBy, setSortBy] = useState("expiryDate")
 
   const sortedFlyers = [...flyers].sort((a, b) => {
@@ -31,7 +246,8 @@ export default function FlyerGrid() {
   return (
     <>
       <Navigation />
-      <div className="flex justify-end mb-4">
+      <div className="flex justify-between mb-4 px-10">
+        <h1 className="font-advercase text-4xl font-semibold">Flyers</h1>
         <Select onValueChange={(value) => setSortBy(value)}>
           <SelectTrigger className="w-[180px]">
             <SelectValue placeholder="Sort by" />
@@ -42,7 +258,7 @@ export default function FlyerGrid() {
           </SelectContent>
         </Select>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-10">
         {sortedFlyers.map((flyer) => (
           <Card key={flyer.id} className="overflow-hidden">
             <CardHeader>
@@ -58,8 +274,8 @@ export default function FlyerGrid() {
               />
             </CardContent>
             <CardFooter className="flex justify-between">
-              <span className="text-sm text-gray-600">Expires: {flyer.expiryDate}</span>
-              <span className="text-sm text-gray-600">{flyer.distance.toFixed(1)} km away</span>
+              <span className="text-sm text-gray-400">Expires: {flyer.expiryDate}</span>
+              <span className="text-sm text-gray-400">{flyer.distance.toFixed(1)} km away</span>
             </CardFooter>
           </Card>
         ))}
