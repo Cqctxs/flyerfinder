@@ -1,0 +1,7 @@
+findflyerswith.us {
+    reverse_proxy localhost:3000
+}
+
+api.findflyerswith.us {
+    reverse_proxy localhost:3001
+}
