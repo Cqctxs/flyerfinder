@@ -24,6 +24,7 @@ app.disable("x-powered-by");
 connectDB();
 
 app.use("/flyer", require("./routes/flyer"));
+app.use("/api/filter", require("./routes/api/filter"));
 
 // 404 middleware
 app.use((req, res, next) => {

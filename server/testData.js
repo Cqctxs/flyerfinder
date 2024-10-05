@@ -6,20 +6,30 @@ const seller = {
 };
 
 const flyer = {
-  items: [
+  pages: [
     {
-      name: "Organic Apples",
-      price: 2.99,
-      image: "https://example.com/apples.jpg",
+      type: 0,
+      items: [
+        {
+          name: "Organic Apples",
+          price: 2.99,
+          image: "https://example.com/apples.jpg",
+        },
+      ],
     },
     {
-      name: "Organic Bananas",
-      price: 1.99,
-      image: "https://example.com/bananas.jpg",
+      type: 0,
+      items: [
+        {
+          name: "Organic Bananas",
+          price: 4.99,
+          image: "https://example.com/apples.jpg",
+        },
+      ],
     },
   ],
 };
 
-const validUntil = new Date("2024-10-05");
+const validUntil = new Date("2024-10-10");
 
 console.log(JSON.stringify({ seller, flyer, validUntil }));
