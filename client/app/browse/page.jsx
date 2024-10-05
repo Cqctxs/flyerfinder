@@ -1,55 +1,28 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import Image from "next/image"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import Navigation from "@/components/navigation"
+import { useState, useEffect } from "react";
+import Image from "next/image";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import Navigation from "@/components/navigation";
 
 // Mock data for flyers
 const json = `{
   "success": true,
   "flyers": [
-    {
-      "_id": "6700db91fd9bee496318c2e5",
-      "seller": {
-        "store": "John's Store",
-        "name": "John Doe",
-        "phone": "555-555-5555",
-        "email": "johndoe@email.com",
-        "coordinates": {
-          "lat": 43.77030841676703,
-          "lon": -79.18480033176169
-        }
-      },
-      "flyer": {
-        "pages": [
-          {
-            "type": 0,
-            "items": [
-              {
-                "name": "Organic Apples",
-                "price": 3.99,
-                "image": "https://example.com/apples.jpg"
-              }
-            ]
-          },
-          {
-            "type": 0,
-            "items": [
-              {
-                "name": "Organic Bananas",
-                "price": 1.99,
-                "image": "https://example.com/apples.jpg"
-              }
-            ]
-          }
-        ]
-      },
-      "validUntil": "2024-10-10T00:00:00.000Z",
-      "__v": 0
-    },
-    {
+  {
       "_id": "6700dbdf79b45f34b8123392",
       "seller": {
         "store": "John's Store",
@@ -175,9 +148,48 @@ const json = `{
       },
       "validUntil": "2024-10-10T00:00:00.000Z",
       "__v": 0
+    },
+    {
+      "_id": "6700db91fd9bee496318c2e5",
+      "seller": {
+        "store": "John's Store",
+        "name": "John Doe",
+        "phone": "555-555-5555",
+        "email": "johndoe@email.com",
+        "coordinates": {
+          "lat": 43.77030841676703,
+          "lon": -79.18480033176169
+        }
+      },
+      "flyer": {
+        "pages": [
+          {
+            "type": 0,
+            "items": [
+              {
+                "name": "Organic Apples",
+                "price": 3.99,
+                "image": "https://example.com/apples.jpg"
+              }
+            ]
+          },
+          {
+            "type": 0,
+            "items": [
+              {
+                "name": "Organic Bananas",
+                "price": 1.99,
+                "image": "https://example.com/apples.jpg"
+              }
+            ]
+          }
+        ]
+      },
+      "validUntil": "2024-10-10T00:00:00.000Z",
+      "__v": 0
     }
   ]
-}`
+}`;
 // const flyers = [
 //   { id: 1, company: "SuperMart", image: "/images/apple.png", expiryDate: "2024-03-15", distance: 2.5 },
 //   { id: 2, company: "TechZone", image: "/placeholder.svg?height=200&width=300", expiryDate: "2024-03-20", distance: 1.8 },
@@ -188,27 +200,36 @@ const json = `{
 
 // ]
 
-function cosineDistanceBetweenPoints(lat1, lon1, lat2, lon2) {
-  const R = 6371e3;
-  const p1 = lat1 * Math.PI/180;
-  const p2 = lat2 * Math.PI/180;
-  const deltaP = p2 - p1;
-  const deltaLon = lon2 - lon1;
-  const deltaLambda = (deltaLon * Math.PI) / 180;
-  const a = Math.sin(deltaP/2) * Math.sin(deltaP/2) +
-            Math.cos(p1) * Math.cos(p2) *
-            Math.sin(deltaLambda/2) * Math.sin(deltaLambda/2);
-  const d = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)) * R;
-  return d;
-}
-
 export default function FlyerGrid() {
+  const cosineDistanceBetweenPoints = (lat1, lon1, lat2, lon2) => {
+    const R = 6371e3;
+    const p1 = (lat1 * Math.PI) / 180;
+    const p2 = (lat2 * Math.PI) / 180;
+    const deltaP = p2 - p1;
+    const deltaLon = lon2 - lon1;
+    const deltaLambda = (deltaLon * Math.PI) / 180;
+    const a =
+      Math.sin(deltaP / 2) * Math.sin(deltaP / 2) +
+      Math.cos(p1) *
+        Math.cos(p2) *
+        Math.sin(deltaLambda / 2) *
+        Math.sin(deltaLambda / 2);
+    const d = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)) * R;
+    return d / 1000;
+  };
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toISOString().split("T")[0];
+  };
   const data = JSON.parse(json);
   console.log(data);
   const flyers = data.flyers;
 
   // Location
-  const [coordinates, setCoordinates] = useState({ latitude: null, longitude: null });
+  const [coordinates, setCoordinates] = useState({
+    latitude: null,
+    longitude: null,
+  });
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -226,23 +247,38 @@ export default function FlyerGrid() {
           }
         );
       } else {
-        setError('Geolocation is not supported by this browser.');
+        setError("Geolocation is not supported by this browser.");
       }
     };
     getLocation();
   }, []);
   console.log(coordinates);
 
-  const [sortBy, setSortBy] = useState("expiryDate")
+  const [sortBy, setSortBy] = useState("expiryDate");
 
-  // const sortedFlyers = [...flyers].sort((a, b) => {
-  //   if (sortBy === "expiryDate") {
-  //     return new Date(a.expiryDate).getTime() - new Date(b.expiryDate).getTime()
-  //   } else if (sortBy === "distance") {
-  //     return a.distance - b.distance
-  //   }
-  //   return 0
-  // })
+  const sortedFlyers = [...flyers].sort((a, b) => {
+    if (sortBy === "expiryDate") {
+      return (
+        new Date(a.expiryDate).getTime() - new Date(b.expiryDate).getTime()
+      );
+    } else if (sortBy === "distance") {
+      return (
+        cosineDistanceBetweenPoints(
+          coordinates.latitude,
+          coordinates.longitude,
+          a.seller.coordinates.lat, // Ensure correct access to latitude
+          a.seller.coordinates.lon // Ensure correct access to longitude
+        ) -
+        cosineDistanceBetweenPoints(
+          coordinates.latitude,
+          coordinates.longitude,
+          b.seller.coordinates.lat, // Ensure correct access to latitude
+          b.seller.coordinates.lon // Ensure correct access to longitude
+        )
+      );
+    }
+    return 0;
+  });
 
   return (
     <>
@@ -260,7 +296,7 @@ export default function FlyerGrid() {
         </Select>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-10">
-        {flyers.map((flyer) => (
+        {sortedFlyers.map((flyer) => (
           <Card key={flyer._id} className="overflow-hidden">
             <CardHeader>
               <CardTitle>{flyer.seller.store}</CardTitle>
@@ -275,12 +311,24 @@ export default function FlyerGrid() {
               />
             </CardContent>
             <CardFooter className="flex justify-between">
-              <span className="text-sm text-gray-400">Expires: {flyer.validUntil}</span>
-              
+              <span className="text-sm text-gray-400">
+                Expires: {formatDate(flyer.validUntil)}
+              </span>
+              <span className="text-sm text-gray-400">
+                Distance:{" "}
+                {coordinates.latitude &&
+                  cosineDistanceBetweenPoints(
+                    coordinates.latitude,
+                    coordinates.longitude,
+                    flyer.seller.coordinates.lat,
+                    flyer.seller.coordinates.lon
+                  ).toFixed(2)}
+                km
+              </span>
             </CardFooter>
           </Card>
         ))}
       </div>
     </>
-  )
+  );
 }
