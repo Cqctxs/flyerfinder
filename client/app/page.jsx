@@ -6,9 +6,9 @@ export default function Home() {
     <>
       <Navigation />
       <div className="w-full h-screen flex flex-col">
-        <Image src="/images/farm.png" alt="Cover Image" fill={true} className="absolute top-0 left-0 w-full h-full bg-cover -z-10" />
+        <Image src="/images/farm.png" alt="Cover Image" fill={true} className="absolute top-0 left-0 w-full h-full bg-cover" />
         <div className="flex flex-col flex-grow relative items-center justify-center">
-          <div className="font-advercase text-9xl p-10 bg-black/20 backdrop-blur-lg rounded-3xl text-white/70 -translate-y-16">
+          <div className="font-advercase text-9xl p-10 bg-black/20 backdrop-blur-lg rounded-3xl text-white -translate-y-16">
             Flyer Finder
             <div className="text-4xl mt-4 text-center">Find the best deals in your area</div>
           </div>

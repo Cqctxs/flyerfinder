@@ -32,7 +32,7 @@ export default function RootLayout({ children }) {
       <TanstackProvider>
         <AuthProvider>
           <body
-            className={`${estrella.variable} ${advercaseRegular.variable} ${advercaseBold.variable}`}
+            className={`${estrella.variable} ${advercaseRegular.variable} ${advercaseBold.variable} bg-gray-900`}
           >
             {children}
           </body>
