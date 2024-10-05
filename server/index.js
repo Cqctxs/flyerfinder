@@ -38,6 +38,7 @@ app.use("/logout", require("./routes/logout"));
 
 app.use("/flyer", require("./routes/flyer"));
 app.use("/api/filter", require("./routes/api/filter"));
+app.use("/image", require("./routes/image"));
 
 // 404 middleware
 app.use((req, res, next) => {

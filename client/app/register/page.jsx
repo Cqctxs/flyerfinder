@@ -53,6 +53,38 @@ export default function Page() {
     setValidLongitude(LONGITUDE_REGEX.test(longitude));
   }, [longitude]);
 
+  const [image, setImage] = useState(null);
+  const [uploadError, setUploadError] = useState("");
+  const [uploadSuccess, setUploadSuccess] = useState("");
+
+  const uploadImage = async () => {
+    if (image) {
+      const formData = new FormData();
+      formData.append("image", image);
+
+      try {
+        const response = await fetch(`http://localhost:3001/image/${email}`, {
+          method: "POST",
+          body: formData,
+        });
+
+        if (response.ok) {
+          setUploadSuccess("Image uploaded successfully!");
+          setUploadError("");
+        } else {
+          setUploadError("Image upload failed");
+          setUploadSuccess("");
+        }
+      } catch (error) {
+        setUploadError("Image upload failed");
+        setUploadSuccess("");
+      }
+    } else {
+      setUploadError("Please select an image to upload");
+      setUploadSuccess("");
+    }
+  };
+
   const register = async () => {
     if (
       validEmail &&
@@ -62,6 +94,7 @@ export default function Page() {
       validLatitude &&
       validLongitude
     ) {
+      await uploadImage();
       const response = await fetch("http://localhost:3001/register", {
         method: "POST",
         headers: {
@@ -132,6 +165,10 @@ export default function Page() {
           placeholder="Longitude of Address"
         />
         {validLongitude ? null : <p>Invalid longitude</p>}
+        <h2>Upload Image</h2>
+        <input type="file" onChange={(e) => setImage(e.target.files[0])} />
+        {uploadError && <p style={{ color: "red" }}>{uploadError}</p>}
+        {uploadSuccess && <p style={{ color: "green" }}>{uploadSuccess}</p>}
         <button onClick={register}>Register</button>
         <p>{error}</p>
         <p>
