@@ -14,12 +14,12 @@ const flyer = {
         {
           name: "Organic Apples",
           price: 4.99,
-          image: "https://example.com/apples.jpg",
+          image: "https://localhost:3001apples.jpg",
         },
         {
           name: "Organic Peaches",
           price: 4.99,
-          image: "https://example.com/apples.jpg",
+          image: "https://localhost:3001/peaches.jpg",
         },
       ],
     },
@@ -29,7 +29,7 @@ const flyer = {
         {
           name: "Organic Bananas",
           price: 4.99,
-          image: "https://example.com/apples.jpg",
+          image: "https://localhost:3001/bananas.jpg",
         },
       ],
     },
