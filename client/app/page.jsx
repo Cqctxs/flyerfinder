@@ -10,7 +10,7 @@ export default function Home() {
     <>
     <div className="w-full h-screen flex flex-col">
 
-      <Image src="/farm.png" alt="Cover Image" fill={true} className="absolute top-0 left-0 w-full h-full bg-cover -z-10" />
+      <Image src="/images/farm.png" alt="Cover Image" fill={true} className="absolute top-0 left-0 w-full h-full bg-cover -z-10" />
       <div
         className="flex flex-col flex-grow relative items-center justify-center"
       >
@@ -19,7 +19,7 @@ export default function Home() {
     </div>
     <div className="w-full h-screen flex flex-col">
       
-    <Image src="/farm.png" alt="Cover Image" fill={true} className="absolute top-0 left-0 w-full h-full bg-cover -z-10" />
+    <Image src="/images/farm.png" alt="Cover Image" fill={true} className="absolute top-0 left-0 w-full h-full bg-cover -z-10" />
     <div
       className="flex flex-col flex-grow relative items-center justify-center"
     >
