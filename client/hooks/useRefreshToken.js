@@ -4,7 +4,7 @@ const useRefreshToken = () => {
   const { setAuth } = useAuth();
 
   const refresh = async () => {
-    const response = await fetch("/refresh", {
+    const response = await fetch("http://localhost:3001/refresh", {
       method: "GET",
       credentials: "include",
     });

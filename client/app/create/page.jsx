@@ -1,6 +1,6 @@
 "use client";
 
-import withAuth from "@/components/withAuth";
+import persistLogin from "@/components/persistLogin";
 
 const create = () => {
   return (
@@ -10,4 +10,4 @@ const create = () => {
   );
 };
 
-export default withAuth(create);
+export default persistLogin(create);

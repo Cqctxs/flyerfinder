@@ -1,7 +1,7 @@
 'use client';
 
 import FlyerSquareOne from "@/components/flyer-square-one";
-import withAuth from "@/components/withAuth";
+import PersistLogin from "@/components/persistLogin";
 
 const test = () => {
   return (
@@ -14,4 +14,4 @@ const test = () => {
   );
 }
 
-export default withAuth(test);
+export default PersistLogin(test);
