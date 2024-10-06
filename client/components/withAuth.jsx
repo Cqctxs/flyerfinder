@@ -10,13 +10,13 @@ const withAuth = (WrappedComponent) => {
     const router = useRouter();
 
     useEffect(() => {
-      if (!auth.accessToken) {
+      if (auth.accessToken === "") {
         router.replace("/login");
       }
     }, [auth, router]);
 
     // If the user is not authenticated, don't render the wrapped component
-    if (!auth.accessToken) {
+    if (auth.accessToken === "") {
       return null;
     }
 
