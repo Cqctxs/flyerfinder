@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { format } from "date-fns";
+import { format, sub } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -27,23 +27,28 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import Navigation from "@/components/navigation";
 import withAuth from "@/components/withAuth";
 import Image from "next/image";
+import useAuth from "@/hooks/useAuth";
+import { useRouter } from "next/navigation";
 
 // Mock product data
 const products = [
-  { name: "Apple", image: "/images/apple.png" },
-  { name: "Banana", image: "/images/banana.png" },
-  { name: "Orange", image: "/images/orange.png" },
-  { name: "Pear", image: "/images/pear.png" },
-  { name: "Grapes", image: "/images/grape.png" },
-  { name: "Strawberry", image: "/images/strawberry.png" },
-  { name: "Carrots", image: "/images/carrot.png" },
-  { name: "Lettuce", image: "/images/lettuce.png" },
-  { name: "Spinach", image: "/images/spinach.png" },
-  { name: "Bread", image: "/images/bread.png" },
+  { id: 1, name: "Apple", image: "/images/apple.png" },
+  { id: 2, name: "Banana", image: "/images/banana.png" },
+  { id: 3, name: "Orange", image: "/images/orange.png" },
+  { id: 4, name: "Pear", image: "/images/pear.png" },
+  { id: 5, name: "Grapes", image: "/images/grape.png" },
+  { id: 6, name: "Strawberry", image: "/images/strawberry.png" },
+  { id: 7, name: "Carrots", image: "/images/carrot.png" },
+  { id: 8, name: "Lettuce", image: "/images/lettuce.png" },
+  { id: 9, name: "Spinach", image: "/images/spinach.png" },
+  { id: 10, name: "Bread", image: "/images/bread.png" },
 ];
 
 const Page = () => {
-  const [totalPages, setTotalPages] = useState(0);
+
+    const router = useRouter();
+  const { auth } = useAuth();
+  const [totalPages, setTotalPages] = useState(1);
   const [flyer, setFlyer] = useState([]);
   const [page, setPage] = useState(0);
   const [selectedProducts, setSelectedProducts] = useState(Array(2).fill(""));
@@ -52,75 +57,126 @@ const Page = () => {
   const [date, setDate] = useState(null);
 
   const nextPage = () => {
-    flyer.push({ products: selectedProducts, prices: prices, type: type, date: date});
+    const updatedFlyer = [...flyer];
+    updatedFlyer.push({
+      products: selectedProducts,
+      prices: prices,
+      type: type,
+    });
+    setFlyer(updatedFlyer);
     setSelectedProducts(Array(2).fill(""));
     setPrices(Array(2).fill(0));
     setType(2);
-    setDate(null);
     setPage((prev) => prev + 1);
   };
 
   const prevPage = () => {
-    setSelectedProducts(flyer[-1].products);
-    setPrices(flyer[-1].prices);
-    setType(flyer[-1].type);
-    setDate(flyer[-1].date);
+    setSelectedProducts(flyer[flyer.length - 1].products);
+    setPrices(flyer[flyer.length - 1].prices);
+    setType(flyer[flyer.length - 1].type);
     flyer.pop();
     setPage((prev) => prev - 1);
   };
   const handlePageTypeChange = (value) => {
     setType(value);
-    console.log(type);
     setSelectedProducts(Array(value).fill(""));
     setPrices(Array(value).fill(0));
   };
   const handleProductSelect = (i, value) => {
-    selectedProducts[i] = products[value].name;
-    console.log(selectedProducts);
+    const updatedProducts = [...selectedProducts];
+    updatedProducts[i] = products.find((p) => p.id === parseInt(value)).name;
+    setSelectedProducts(updatedProducts);
   };
   const handlePriceChange = (i, price) => {
-    prices[i] = price;
+    const updatedPrices = [...prices];
+    updatedPrices[i] = price;
+    setPrices(updatedPrices);
+  };
+
+  const submitFlyer = async () => {
+    const updatedFlyer = [...flyer];
+    updatedFlyer.push({
+      products: selectedProducts,
+      prices: prices,
+      type: type,
+    });
+    setFlyer(updatedFlyer);
+
+    const subFlyer = [];
+    for (let i = 0; i < updatedFlyer.length; i++) {
+      subFlyer.push({
+        type: updatedFlyer[i].type,
+        items: updatedFlyer[i].products.map((product, j) => ({
+          name: product,
+          price: updatedFlyer[i].prices[j],
+          image: products.find((p) => p.name === product).image,
+        })),
+      });
+    }
+    const seller = {
+      user: auth.user,
+      store: auth.store,
+      phone: auth.phone,
+      coords: auth.coords,
+    };
+    const validUntil = date;
+    const request = JSON.stringify({
+      seller: seller,
+      flyer: subFlyer,
+      validUntil: validUntil,
+    });
+    try {
+        const response = await fetch("https://api.findflyerswith.us/flyer", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: request,
+        });
+        if (response.ok) {
+            console.log("Flyer created successfully");
+        }
+    } catch (error) {
+        console.error("Failed to create flyer");
+    }
+    router.push("/browse");
   };
 
   const renderProductSelector = (i) => {
-    const selectedProduct = products.find((p) => p.name === selectedProducts[i]);
+    const selectedProduct = products.find(
+      (p) => p.name === selectedProducts[i]
+    );
 
     return (
-      <div className="space-y-2">
-        {i}
-        <Select onValueChange={(value) => handleProductSelect(i, value)}>
+      <div key={i} className="space-y-2">
+        <Select
+          onValueChange={(value) => handleProductSelect(i, parseInt(value))}
+        >
           <SelectTrigger>
-            {selectedProducts[i] === '' ? (
-              <SelectValue placeholder="Select a product" />
-            ) : (
-              <SelectValue>{products[selectedProducts[i]].name}</SelectValue>
-            )}
+            <SelectValue placeholder="Select a product" />
           </SelectTrigger>
           <SelectContent>
-            {products.map((product, index) => (
-              <SelectItem key={index} value={index.toString()}>
+            {products.map((product) => (
+              <SelectItem key={product.id} value={product.id.toString()}>
                 {product.name}
               </SelectItem>
             ))}
           </SelectContent>
         </Select>
-        {selectedProduct !== "" && (
+        {selectedProduct && (
           <Card>
             <CardContent className="p-4">
               <Image
-                src={products[selectedProducts[i]].image}
-                alt={products[selectedProducts[i]].name}
+                src={selectedProduct.image}
+                alt={selectedProduct.name}
                 width={100}
                 height={100}
                 className="mb-2"
               />
-              <p className="font-semibold text-xl">
-                {products[selectedProducts[i]].name}
-              </p>
+              <p className="font-semibold text-xl">{selectedProduct.name}</p>
               <Input
                 type="number"
                 placeholder="Price"
-                value={prices[i] || ""}
                 onChange={(e) => handlePriceChange(i, e.target.value)}
                 className="mt-2"
               />
@@ -144,7 +200,7 @@ const Page = () => {
             id="total-pages"
             type="number"
             min="1"
-            value={totalPages+1}
+            value={totalPages}
             onChange={(e) => setTotalPages(parseInt(e.target.value))}
           />
         </div>
@@ -181,7 +237,7 @@ const Page = () => {
                 )}
               >
                 <CalendarIcon className="mr-2 h-4 w-4" />
-                {date ? format(date, "PPP") : <span>Pick a date</span>}
+                {date ? new Date(date).toISOString() : <span>Pick a date</span>}
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0">
@@ -197,7 +253,7 @@ const Page = () => {
 
         <div className="space-y-4">
           <h2 className="text-xl font-bold">
-            Page {page+1} of {totalPages+1}
+            Page {page + 1} of {totalPages}
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -206,11 +262,11 @@ const Page = () => {
         </div>
 
         <div className="flex justify-between items-center">
-          <Button onClick={() => prevPage()} disabled={page === 1}>
+          <Button onClick={() => prevPage()} disabled={page === 0}>
             <ChevronLeft className="mr-2 h-4 w-4" /> Previous
           </Button>
-          {page === totalPages ? (
-            <Button onClick={() => console.log("Submit flyer")}>
+          {page === totalPages - 1 ? (
+            <Button onClick={submitFlyer}>
               Submit Flyer
             </Button>
           ) : (

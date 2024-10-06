@@ -35,6 +35,7 @@ export default function Page() {
         console.log(result);
         setAuth({
           user: result.user,
+          store: result.store,
           phone: result.phone,
           coords: result.coords,
           accessToken: result.accessToken,
