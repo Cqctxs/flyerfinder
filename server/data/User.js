@@ -10,6 +10,10 @@ const userSchema = new Schema({
         type: String,
         required: true
     },
+    store: {
+        type: String,
+        required: true
+    },
     phone: {
         type: String,
         required: true
