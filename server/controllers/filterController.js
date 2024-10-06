@@ -6,21 +6,21 @@ const sortItemsByPrice = async (req, res) => {
     const currentDate = new Date();
     const items = await Flyer.aggregate([
       { $match: { validUntil: { $gte: currentDate } } },
-      { $unwind: "$flyer.pages" },
-      { $unwind: "$flyer.pages.items" },
-      { $match: { "flyer.pages.items.name": product } },
+      { $unwind: "$flyer" },
+      { $unwind: "$flyer.items" },
+      { $match: { "flyer.items.name": product } },
       {
         $project: {
           _id: 0,
-          item: "$flyer.pages.items",
+          item: "$flyer.items",
           seller: "$seller",
         },
       },
     ]);
-    items.sort((a, b) => a.item.price - b.item.price);
+    items.sort((a, b) => parseFloat(a.item.price) - parseFloat(b.item.price));
     res.json({ success: true, items });
   } catch (err) {
-    res.status(500).json({ success: false, error: err });
+    res.status(500).json({ success: false, error: err.message });
   }
 };
 
@@ -30,25 +30,25 @@ const sortItemsByLocation = async (req, res) => {
     const currentDate = new Date();
     const items = await Flyer.aggregate([
       { $match: { validUntil: { $gte: currentDate } } },
-      { $unwind: "$flyer.pages" },
-      { $unwind: "$flyer.pages.items" },
-      { $match: { "flyer.pages.items.name": product } },
+      { $unwind: "$flyer" },
+      { $unwind: "$flyer.items" },
+      { $match: { "flyer.items.name": product } },
       {
         $project: {
           _id: 0,
-          item: "$flyer.pages.items",
+          item: "$flyer.items",
           seller: "$seller",
         },
       },
     ]);
     items.sort((a, b) => {
       const distanceA = Math.sqrt(
-        Math.pow(a.seller.coordinates.lat - lat, 2) +
-          Math.pow(a.seller.coordinates.lon - lon, 2)
+        Math.pow(a.seller.coords.latitude - lat, 2) +
+          Math.pow(a.seller.coords.longitude - lon, 2)
       );
       const distanceB = Math.sqrt(
-        Math.pow(b.seller.coordinates.lat - lat, 2) +
-          Math.pow(b.seller.coordinates.lon - lon, 2)
+        Math.pow(b.seller.coords.latitude - lat, 2) +
+          Math.pow(b.seller.coords.longitude - lon, 2)
       );
       return distanceA - distanceB;
     });
