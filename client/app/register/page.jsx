@@ -105,6 +105,7 @@ const Page = () => {
         body: JSON.stringify({
           user: email,
           pwd: pwd,
+          store: store,
           phone: phone,
           coords: { latitude: latitude, longitude: longitude },
         }),
