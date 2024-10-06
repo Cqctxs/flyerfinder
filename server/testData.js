@@ -9,7 +9,7 @@ const seller = {
 const flyer = {
   pages: [
     {
-      type: 1,
+      type: 2,
       items: [
         {
           name: "Organic Apples",
@@ -20,16 +20,6 @@ const flyer = {
           name: "Organic Peaches",
           price: 4.99,
           image: "https://localhost:3001/peaches.jpg",
-        },
-      ],
-    },
-    {
-      type: 0,
-      items: [
-        {
-          name: "Organic Bananas",
-          price: 4.99,
-          image: "https://localhost:3001/bananas.jpg",
         },
       ],
     },
