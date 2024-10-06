@@ -23,4 +23,13 @@ const getFlyers = async (req, res) => {
   }
 }
 
-module.exports = { addFlyer, getFlyers };
+const getFlyerFromID = async (req, res) => {
+  try {
+    const flyer = await Flyer.findById(req.params.id);
+    res.json({ success: true, flyer });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err });
+  }
+}
+
+module.exports = { addFlyer, getFlyers, getFlyerFromID };

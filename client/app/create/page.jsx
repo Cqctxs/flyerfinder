@@ -159,7 +159,7 @@ const Page = () => {
           </Label>
           <Select
             value={type}
-            onValueChange={(value) => handlePageTypeChange(parseInt(value))}
+            onValueChange={(value) => handlePageTypeChange(parseInt(e.target.value))}
           >
             <SelectTrigger id="page-type">
               <SelectValue placeholder="Select items per page" />
