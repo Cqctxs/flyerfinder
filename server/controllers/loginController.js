@@ -13,6 +13,7 @@ const handleLogin = async (req, res) => {
   // evaluate password
   const match = await bcrypt.compare(pwd, foundUser.password);
   if (match) {
+    const store = foundUser.store;
     const phone = foundUser.phone;
     const coords = foundUser.coordinates;
     // create JWTs
@@ -20,6 +21,7 @@ const handleLogin = async (req, res) => {
       {
         UserInfo: {
           username: foundUser.username,
+          store: store,
           phone: phone,
           coordinates: coords,
         },
@@ -44,7 +46,7 @@ const handleLogin = async (req, res) => {
       secure: true,
       maxAge: 24 * 60 * 60 * 1000,
     });
-    res.json({ user, phone, coords, accessToken });
+    res.json({ user, store, phone, coords, accessToken });
   } else {
     res.sendStatus(401);
   }
