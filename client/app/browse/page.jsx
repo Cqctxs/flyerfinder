@@ -126,7 +126,6 @@ export default function FlyerGrid() {
         </div>
       ) : (
         <>
-        {console.log(flyers)}
           <div className="flex justify-between mb-4 px-10">
             <h1 className="font-advercase text-4xl font-semibold">Flyers</h1>
             <Select onValueChange={(value) => setSortBy(value)}>
@@ -150,7 +149,7 @@ export default function FlyerGrid() {
                   </CardHeader>
                   <CardContent className="p-0">
                     <Image
-                      // src={flyer.flyer.pages[0].items[0].image}
+                      src={`https://api.findflyerswith.us/images/${flyer.seller.user}.png`}
                       alt={`${flyer.seller.store}'s flyer`}
                       width={300}
                       height={200}
