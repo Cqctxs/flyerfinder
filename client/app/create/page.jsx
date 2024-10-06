@@ -1,5 +1,17 @@
 "use client";
 
+import * as React from "react";
+import { format } from "date-fns";
+import { Calendar as CalendarIcon } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+
 import { useState } from "react";
 import {
   Select,
@@ -10,7 +22,6 @@ import {
 } from "@/components/ui/select";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { Label } from "@radix-ui/react-label";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Navigation from "@/components/navigation";
@@ -19,44 +30,53 @@ import Image from "next/image";
 
 // Mock product data
 const products = [
-  { id: 1, name: "Apple", image: "/images/apple.png" },
-  { id: 2, name: "Banana", image: "/images/banana.png" },
-  { id: 3, name: "Orange", image: "/images/orange.png" },
-  { id: 4, name: "Pear", image: "/images/pear.png" },
-  { id: 5, name: "Grapes", image: "/images/grape.png" },
-  { id: 6, name: "Strawberry", image: "/images/strawberry.png" },
-  { id: 7, name: "Carrots", image: "/images/carrot.png" },
-  { id: 8, name: "Lettuce", image: "/images/lettuce.png" },
-  { id: 9, name: "Spinach", image: "/images/spinach.png" },
-  { id: 10, name: "Bread", image: "/images/bread.png" },
+  { name: "Apple", image: "/images/apple.png" },
+  { name: "Banana", image: "/images/banana.png" },
+  { name: "Orange", image: "/images/orange.png" },
+  { name: "Pear", image: "/images/pear.png" },
+  { name: "Grapes", image: "/images/grape.png" },
+  { name: "Strawberry", image: "/images/strawberry.png" },
+  { name: "Carrots", image: "/images/carrot.png" },
+  { name: "Lettuce", image: "/images/lettuce.png" },
+  { name: "Spinach", image: "/images/spinach.png" },
+  { name: "Bread", image: "/images/bread.png" },
 ];
 
 const Page = () => {
-  const [totalPages, setTotalPages] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
   const [flyer, setFlyer] = useState([]);
   const [page, setPage] = useState(0);
-  const [selectedProducts, setSelectedProducts] = useState(Array(2).fill(0));
+  const [selectedProducts, setSelectedProducts] = useState(Array(2).fill(""));
   const [type, setType] = useState(2);
-  const [prices, setPrices] = useState([]);
+  const [prices, setPrices] = useState(Array(2).fill(0));
+  const [date, setDate] = useState(null);
 
   const nextPage = () => {
-    setSelectedProducts([]);
-    setPrices([]);
+    flyer.push({ products: selectedProducts, prices: prices, type: type, date: date});
+    setSelectedProducts(Array(2).fill(""));
+    setPrices(Array(2).fill(0));
     setType(2);
+    setDate(null);
     setPage((prev) => prev + 1);
   };
 
   const prevPage = () => {
+    setSelectedProducts(flyer[-1].products);
+    setPrices(flyer[-1].prices);
+    setType(flyer[-1].type);
+    setDate(flyer[-1].date);
+    flyer.pop();
     setPage((prev) => prev - 1);
   };
   const handlePageTypeChange = (value) => {
-    console.log(value);
     setType(value);
-    setSelectedProducts(Array(value).fill(0));
+    console.log(type);
+    setSelectedProducts(Array(value).fill(""));
     setPrices(Array(value).fill(0));
   };
-  const handleProductSelect = (i, productId) => {
-    selectedProducts[i] = productId;
+  const handleProductSelect = (i, value) => {
+    selectedProducts[i] = products[value].name;
+    console.log(selectedProducts);
   };
   const handlePriceChange = (i, price) => {
     prices[i] = price;
@@ -65,36 +85,41 @@ const Page = () => {
   const renderProductSelector = (i) => {
     return (
       <div className="space-y-2">
-        <Select
-          onValueChange={(value) => handleProductSelect(i, parseInt(value))}
-        >
+        {i}
+        <Select onValueChange={(value) => handleProductSelect(i, value)}>
           <SelectTrigger>
-            <SelectValue placeholder="Select a product" />
+            {selectedProducts[i] === '' ? (
+              <SelectValue placeholder="Select a product" />
+            ) : (
+              <SelectValue>{products[selectedProducts[i]].name}</SelectValue>
+            )}
           </SelectTrigger>
           <SelectContent>
-            {products.map((product) => (
-              <SelectItem key={product.id} value={product.id.toString()}>
+            {products.map((product, index) => (
+              <SelectItem key={index} value={index.toString()}>
                 {product.name}
               </SelectItem>
             ))}
           </SelectContent>
         </Select>
-        {selectedProducts[i] != 0 && (
+        {selectedProducts[i] !== "" && (
           <Card>
             <CardContent className="p-4">
               <Image
-                src={selectedProduct.image}
-                alt={selectedProduct.name}
+                src={products[selectedProducts[i]].image}
+                alt={products[selectedProducts[i]].name}
                 width={100}
                 height={100}
                 className="mb-2"
               />
-              <p className="font-semibold text-xl">{selectedProduct.name}</p>
+              <p className="font-semibold text-xl">
+                {products[selectedProducts[i]].name}
+              </p>
               <Input
                 type="number"
                 placeholder="Price"
-                value={prices[key] || ""}
-                onChange={(e) => handlePriceChange(index, e.target.value)}
+                value={prices[i] || ""}
+                onChange={(e) => handlePriceChange(i, e.target.value)}
                 className="mt-2"
               />
             </CardContent>
@@ -102,37 +127,6 @@ const Page = () => {
         )}
       </div>
     );
-  };
-
-  const submitFlyer = () => {
-    const pages = [];
-
-    for (let page = 1; page <= totalPages; page++) {
-      const items = [];
-      for (let i = 0; i < (itemsPerPage[page] || 2); i++) {
-        const key = `${page}-${i}`;
-        const productId = selectedProducts[key];
-        const product = products.find((p) => p.id === productId);
-        const price = prices[key];
-
-        if (product && price) {
-          items.push({
-            name: product.name,
-            price: parseFloat(price),
-            image: product.image,
-          });
-        }
-      }
-
-      pages.push({
-        type: items.length <= 2 ? 1 : items.length <= 4 ? 2 : 3,
-        items: items,
-      });
-    }
-
-    const flyer = { pages: pages };
-    console.log(flyer);
-    // Here you can send the flyer data to an API or handle it as needed
   };
 
   return (
@@ -148,7 +142,7 @@ const Page = () => {
             id="total-pages"
             type="number"
             min="1"
-            value={totalPages}
+            value={totalPages+1}
             onChange={(e) => setTotalPages(parseInt(e.target.value))}
           />
         </div>
@@ -158,8 +152,7 @@ const Page = () => {
             Items per Page
           </Label>
           <Select
-            value={type}
-            onValueChange={(value) => handlePageTypeChange(parseInt(e.target.value))}
+            onValueChange={(value) => handlePageTypeChange(parseInt(value))}
           >
             <SelectTrigger id="page-type">
               <SelectValue placeholder="Select items per page" />
@@ -172,10 +165,39 @@ const Page = () => {
           </Select>
         </div>
 
+        <div className="space-y-2">
+          <Label htmlFor="date" className="text-xl">
+            Flyer Date
+          </Label>
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button
+                variant={"outline"}
+                className={cn(
+                  "justify-start text-left font-normal",
+                  !date && "text-foreground"
+                )}
+              >
+                <CalendarIcon className="mr-2 h-4 w-4" />
+                {date ? format(date, "PPP") : <span>Pick a date</span>}
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-0">
+              <Calendar
+                mode="single"
+                selected={date}
+                onSelect={setDate}
+                initialFocus
+              />
+            </PopoverContent>
+          </Popover>
+        </div>
+
         <div className="space-y-4">
           <h2 className="text-xl font-bold">
-            Page {page} of {totalPages}
+            Page {page+1} of {totalPages+1}
           </h2>
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {Array.from({ length: type }, (_, i) => renderProductSelector(i))}
           </div>
