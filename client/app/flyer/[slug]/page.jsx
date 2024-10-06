@@ -6,7 +6,7 @@ import { format } from 'date-fns';
 import Image from 'next/image';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Phone } from "lucide-react";
-
+import { cn } from "@/lib/utils";
 import { useState } from "react";
 
 export default function Flyer({ params }) {
@@ -21,6 +21,7 @@ export default function Flyer({ params }) {
   }
 
   const fetchFlyer = async () => {
+    console.log(`https://api.findflyerswith.us/flyer/${params.slug}`);
     const res = await fetch(
       `https://api.findflyerswith.us/flyer/${params.slug}`
     );
@@ -71,30 +72,28 @@ export default function Flyer({ params }) {
               </div>
             </CardHeader>
             <CardContent className="p-6">
-              {flyerData.flyer[index].pages.map((page, pageIndex) => (
-                <div key={pageIndex} className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {page.items.map((item, itemIndex) => (
-                    <Card key={itemIndex} className="overflow-hidden">
-                      <div className="relative">
-                        <Image
-                          src={item.image}
-                          alt={item.name}
-                          width={500}
-                          height={500}
-                          objectFit="cover"
-                        />
-                      </div>
-                      <CardContent className="p-4">
-                        <h3 className="text-lg font-semibold flex justify-between">
-                          {item.name}
-                          <span className="text-red-600">New Sale!</span>
-                          </h3>
-                        <p className="text-3xl font-bold text-primary mt-2">${item.price.toFixed(2)}</p>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
-              ))}
+              <div className={cn("grid gap-6", flyerData.flyer[index].type === 6 ? "grid-cols-3" : "grid-cols-2")}>
+                {flyerData.flyer[index].items.map((item, itemIndex) => (
+                  <Card key={itemIndex} className="overflow-hidden">
+                    <div className="relative">
+                      <Image
+                        src={item.image}
+                        alt={item.name}
+                        width={500}
+                        height={500}
+                        objectFit="cover"
+                      />
+                    </div>
+                    <CardContent className="p-4">
+                      <h3 className="text-xl font-semibold flex justify-between">
+                        {item.name}
+                        <span className="text-red-600">New Sale!</span>
+                      </h3>
+                      <p className="text-3xl font-bold text-primary mt-2">${item.price}</p>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
             </CardContent>
           </Card>
           <p className="text-center mt-4 text-xl text-muted-foreground">
