@@ -15,15 +15,20 @@ import { Label } from "@radix-ui/react-label";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Navigation from "@/components/navigation";
 import withAuth from "@/components/withAuth";
+import Image from "next/image";
 
 // Mock product data
 const products = [
-  { id: 1, name: "Apple", image: "/placeholder.svg" },
-  { id: 2, name: "Banana", image: "/placeholder.svg" },
-  { id: 3, name: "Orange", image: "/placeholder.svg" },
-  { id: 4, name: "Pear", image: "/placeholder.svg" },
-  { id: 5, name: "Grapes", image: "/placeholder.svg" },
-  { id: 6, name: "Strawberry", image: "/placeholder.svg" },
+  { id: 1, name: "Apple", image: "/images/apple.png" },
+  { id: 2, name: "Banana", image: "/images/banana.png" },
+  { id: 3, name: "Orange", image: "/images/orange.png" },
+  { id: 4, name: "Pear", image: "/images/pear.png" },
+  { id: 5, name: "Grapes", image: "/images/grape.png" },
+  { id: 6, name: "Strawberry", image: "/images/strawberry.png" },
+  { id: 7, name: "Carrots", image: "/images/carrot.png" },
+  { id: 8, name: "Lettuce", image: "/images/lettuce.png" },
+  { id: 9, name: "Spinach", image: "/images/spinach.png" },
+  { id: 10, name: "Bread", image: "/images/bread.png" },
 ];
 
 const Page = () => {
@@ -79,12 +84,14 @@ const Page = () => {
         {selectedProduct && (
           <Card>
             <CardContent className="p-4">
-              <img
+              <Image
                 src={selectedProduct.image}
                 alt={selectedProduct.name}
-                className="w-full h-32 object-cover mb-2"
+                width={100}
+                height={100}
+                className="mb-2"
               />
-              <p className="font-semibold">{selectedProduct.name}</p>
+              <p className="font-semibold text-xl">{selectedProduct.name}</p>
               <Input
                 type="number"
                 placeholder="Price"

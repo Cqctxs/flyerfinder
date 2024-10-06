@@ -5,7 +5,7 @@ import { BadgePlus, Search } from 'lucide-react';
 
 export default function Navigation() {
     return (
-        <nav className="sticky top-0 w-full flex justify-between items-center p-4 shadow-md z-50 bg-black/20 backdrop-blur-lg rounded-xl">
+        <nav className="sticky top-0 w-full flex justify-between items-center p-4 shadow-md z-50 bg-black/20 backdrop-blur-lg rounded-b-xl">
         <div className="m-2">
           <Link href="/" className='block p-2'>
             <div className="flex items-center justify-center">
