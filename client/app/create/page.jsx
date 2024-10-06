@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useState } from "react";
 import {
@@ -34,41 +34,39 @@ const products = [
 const Page = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [flyer, setFlyer] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState({ 1: 2 });
-  const [selectedProducts, setSelectedProducts] = useState({});
-  const [prices, setPrices] = useState({});
+  const [page, setPage] = useState(0);
+  const [selectedProducts, setSelectedProducts] = useState(Array(2).fill(0));
+  const [type, setType] = useState(2);
+  const [prices, setPrices] = useState([]);
 
-  const handleProductSelect = (index, productId) => {
-    setSelectedProducts((prev) => ({
-      ...prev,
-      [`${currentPage}-${index}`]: productId,
-    }));
+  const nextPage = () => {
+    setSelectedProducts([]);
+    setPrices([]);
+    setType(2);
+    setPage((prev) => prev + 1);
   };
 
-  const handlePriceChange = (index, price) => {
-    setPrices((prev) => ({
-      ...prev,
-      [`${currentPage}-${index}`]: price,
-    }));
+  const prevPage = () => {
+    setPage((prev) => prev - 1);
+  };
+  const handlePageTypeChange = (value) => {
+    console.log(value);
+    setType(value);
+    setSelectedProducts(Array(value).fill(0));
+    setPrices(Array(value).fill(0));
+  };
+  const handleProductSelect = (i, productId) => {
+    selectedProducts[i] = productId;
+  };
+  const handlePriceChange = (i, price) => {
+    prices[i] = price;
   };
 
-  const handlePageTypeChange = (page, items) => {
-    setItemsPerPage((prev) => ({
-      ...prev,
-      [page]: items,
-    }));
-  };
-
-  const renderProductSelector = (index) => {
-    const key = `${currentPage}-${index}`;
-    const selectedProductId = selectedProducts[key];
-    const selectedProduct = products.find((p) => p.id === selectedProductId);
-
+  const renderProductSelector = (i) => {
     return (
-      <div key={index} className="space-y-2">
+      <div className="space-y-2">
         <Select
-          onValueChange={(value) => handleProductSelect(index, parseInt(value))}
+          onValueChange={(value) => handleProductSelect(i, parseInt(value))}
         >
           <SelectTrigger>
             <SelectValue placeholder="Select a product" />
@@ -81,7 +79,7 @@ const Page = () => {
             ))}
           </SelectContent>
         </Select>
-        {selectedProduct && (
+        {selectedProducts[i] != 0 && (
           <Card>
             <CardContent className="p-4">
               <Image
@@ -129,10 +127,8 @@ const Page = () => {
             Items per Page
           </Label>
           <Select
-            value={itemsPerPage[currentPage]?.toString() || "2"}
-            onValueChange={(value) =>
-              handlePageTypeChange(currentPage, parseInt(value))
-            }
+            value={type}
+            onValueChange={(value) => handlePageTypeChange(parseInt(value))}
           >
             <SelectTrigger id="page-type">
               <SelectValue placeholder="Select items per page" />
@@ -147,32 +143,25 @@ const Page = () => {
 
         <div className="space-y-4">
           <h2 className="text-xl font-bold">
-            Page {currentPage} of {totalPages}
+            Page {page} of {totalPages}
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {Array.from({ length: itemsPerPage[currentPage] || 2 }, (_, i) =>
-              renderProductSelector(i)
-            )}
+            {Array.from({ length: type }, (_, i) => renderProductSelector(i))}
           </div>
         </div>
 
         <div className="flex justify-between items-center">
-          <Button
-            onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
-            disabled={currentPage === 1}
-          >
+          <Button onClick={() => prevPage()} disabled={page === 1}>
             <ChevronLeft className="mr-2 h-4 w-4" /> Previous
           </Button>
-          {currentPage === totalPages ? (
+          {page === totalPages ? (
             <Button onClick={() => console.log("Submit flyer")}>
               Submit Flyer
             </Button>
           ) : (
             <Button
-              onClick={() =>
-                setCurrentPage((prev) => Math.min(totalPages, prev + 1))
-              }
-              disabled={currentPage === totalPages}
+              onClick={() => nextPage()}
+              disabled={page === totalPages}
             >
               Next <ChevronRight className="ml-2 h-4 w-4" />
             </Button>
