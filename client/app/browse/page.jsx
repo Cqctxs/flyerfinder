@@ -100,14 +100,14 @@ export default function FlyerGrid() {
             cosineDistanceBetweenPoints(
               coordinates.latitude,
               coordinates.longitude,
-              a.seller.coords.lat,
-              a.seller.coords.lon
+              a.seller.coords.latitude,
+              a.seller.coords.longitude
             ) -
             cosineDistanceBetweenPoints(
               coordinates.latitude,
               coordinates.longitude,
-              b.seller.coords.lat,
-              b.seller.coords.lon
+              b.seller.coords.latitude,
+              b.seller.coords.longitude
             )
           );
         }
@@ -161,14 +161,18 @@ export default function FlyerGrid() {
                     </span>
                     <span className="text-sm text-gray-400">
                       Distance:{" "}
-                      {coordinates.latitude &&
-                        cosineDistanceBetweenPoints(
-                          coordinates.latitude,
-                          coordinates.longitude,
-                          flyer.seller.coords.lat,
-                          flyer.seller.coords.lon
-                        ).toFixed(2)}
-                      km
+                      {coordinates.latitude && coordinates.longitude ? (
+                        <>
+                          {`${cosineDistanceBetweenPoints(
+                            coordinates.latitude,
+                            coordinates.longitude,
+                            flyer.seller.coords.latitude,
+                            flyer.seller.coords.longitude
+                          ).toFixed(2)} km`}
+                        </>
+                      ) : (
+                        "N/A"
+                      )}
                     </span>
                   </CardFooter>
                 </Card>
