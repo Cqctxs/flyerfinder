@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import Link from "next/link";
 import {
   Select,
   SelectContent,
@@ -37,13 +36,13 @@ export default function ProductGrid({ params }) {
     };
 
     if (sortBy === "price") {
-      url = `http://localhost:3001/api/filter/price/${params.product}`;
+      url = `https://api.findflyerswith.us/api/filter/price/${params.product}`;
     } else if (
       sortBy === "distance" &&
       coordinates.latitude &&
       coordinates.longitude
     ) {
-      url = `http://localhost:3001/api/filter/location/${params.product}`;
+      url = `https://api.findflyerswith.us/api/filter/location/${params.product}`;
       options = {
         method: "POST",
         headers: {
