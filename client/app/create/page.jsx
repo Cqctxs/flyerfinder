@@ -28,6 +28,7 @@ const products = [
 
 const Page = () => {
   const [totalPages, setTotalPages] = useState(1);
+  const [flyer, setFlyer] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState({ 1: 2 });
   const [selectedProducts, setSelectedProducts] = useState({});
