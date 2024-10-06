@@ -1,21 +1,20 @@
-"use client";
+'use client';
 
-import withAuth from "@/components/withAuth";
 import { useState } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import {
   Select,
-  SelectContent,
-  SelectItem,
   SelectTrigger,
   SelectValue,
+  SelectContent,
+  SelectItem,
 } from "@/components/ui/select";
 import { Card, CardContent } from "@/components/ui/card";
-
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Label } from "@radix-ui/react-label";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import Navigation from "@/components/navigation";
+import withAuth from "@/components/withAuth";
 
 // Mock product data
 const products = [
@@ -30,7 +29,7 @@ const products = [
 const Page = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageType, setPageType] = useState("2");
+  const [itemsPerPage, setItemsPerPage] = useState({ 1: 2 });
   const [selectedProducts, setSelectedProducts] = useState({});
   const [prices, setPrices] = useState({});
 
@@ -48,6 +47,13 @@ const Page = () => {
     }));
   };
 
+  const handlePageTypeChange = (page, items) => {
+    setItemsPerPage((prev) => ({
+      ...prev,
+      [page]: items,
+    }));
+  };
+
   const renderProductSelector = (index) => {
     const key = `${currentPage}-${index}`;
     const selectedProductId = selectedProducts[key];
@@ -55,7 +61,6 @@ const Page = () => {
 
     return (
       <div key={index} className="space-y-2">
-
         <Select
           onValueChange={(value) => handleProductSelect(index, parseInt(value))}
         >
@@ -99,7 +104,9 @@ const Page = () => {
       <div className="max-w-4xl mx-auto p-4 space-y-6">
         <h1 className="font-advercase text-4xl font-semibold">Create Flyer</h1>
         <div className="space-y-2">
-          <Label htmlFor="total-pages" className="text-xl">Number of Pages</Label>
+          <Label htmlFor="total-pages" className="text-xl">
+            Number of Pages
+          </Label>
           <Input
             id="total-pages"
             type="number"
@@ -110,8 +117,15 @@ const Page = () => {
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="page-type" className="text-xl">Items per Page</Label>
-          <Select value={pageType} onValueChange={setPageType}>
+          <Label htmlFor="page-type" className="text-xl">
+            Items per Page
+          </Label>
+          <Select
+            value={itemsPerPage[currentPage]?.toString() || "2"}
+            onValueChange={(value) =>
+              handlePageTypeChange(currentPage, parseInt(value))
+            }
+          >
             <SelectTrigger id="page-type">
               <SelectValue placeholder="Select items per page" />
             </SelectTrigger>
@@ -128,7 +142,7 @@ const Page = () => {
             Page {currentPage} of {totalPages}
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {Array.from({ length: parseInt(pageType) }, (_, i) =>
+            {Array.from({ length: itemsPerPage[currentPage] || 2 }, (_, i) =>
               renderProductSelector(i)
             )}
           </div>
@@ -159,6 +173,6 @@ const Page = () => {
       </div>
     </>
   );
-}
+};
 
 export default withAuth(Page);
