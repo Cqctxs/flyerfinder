@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import {
   Select,
   SelectContent,
@@ -211,9 +212,9 @@ export default function FlyerGrid() {
     const a =
       Math.sin(deltaP / 2) * Math.sin(deltaP / 2) +
       Math.cos(p1) *
-        Math.cos(p2) *
-        Math.sin(deltaLambda / 2) *
-        Math.sin(deltaLambda / 2);
+      Math.cos(p2) *
+      Math.sin(deltaLambda / 2) *
+      Math.sin(deltaLambda / 2);
     const d = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)) * R;
     return d / 1000;
   };
@@ -297,36 +298,38 @@ export default function FlyerGrid() {
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-10">
         {sortedFlyers.map((flyer) => (
-          <Card key={flyer._id} className="overflow-hidden">
-            <CardHeader>
-              <CardTitle>{flyer.seller.store}</CardTitle>
-            </CardHeader>
-            <CardContent className="p-0">
-              <Image
-                src={flyer.image}
-                alt={`${flyer.store}'s flyer`}
-                width={300}
-                height={200}
-                className="w-full h-48 object-cover"
-              />
-            </CardContent>
-            <CardFooter className="flex justify-between">
-              <span className="text-sm text-gray-400">
-                Expires: {formatDate(flyer.validUntil)}
-              </span>
-              <span className="text-sm text-gray-400">
-                Distance:{" "}
-                {coordinates.latitude &&
-                  cosineDistanceBetweenPoints(
-                    coordinates.latitude,
-                    coordinates.longitude,
-                    flyer.seller.coordinates.lat,
-                    flyer.seller.coordinates.lon
-                  ).toFixed(2)}
-                km
-              </span>
-            </CardFooter>
-          </Card>
+          <Link href={`/flyer/${flyer._id}`}>
+            <Card key={flyer._id} className="overflow-hidden">
+              <CardHeader>
+                <CardTitle className="text-2xl">{flyer.seller.store}</CardTitle>
+              </CardHeader>
+              <CardContent className="p-0">
+                <Image
+                  src={flyer.image}
+                  alt={`${flyer.store}'s flyer`}
+                  width={300}
+                  height={200}
+                  className="w-full h-48 object-cover"
+                />
+              </CardContent>
+              <CardFooter className="flex justify-between">
+                <span className="text-sm text-gray-400">
+                  Expires: {formatDate(flyer.validUntil)}
+                </span>
+                <span className="text-sm text-gray-400">
+                  Distance:{" "}
+                  {coordinates.latitude &&
+                    cosineDistanceBetweenPoints(
+                      coordinates.latitude,
+                      coordinates.longitude,
+                      flyer.seller.coordinates.lat,
+                      flyer.seller.coordinates.lon
+                    ).toFixed(2)}
+                  km
+                </span>
+              </CardFooter>
+            </Card>
+          </Link>
         ))}
       </div>
     </>

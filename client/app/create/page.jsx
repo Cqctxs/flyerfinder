@@ -105,6 +105,37 @@ const Page = () => {
     );
   };
 
+  const submitFlyer = () => {
+    const pages = [];
+
+    for (let page = 1; page <= totalPages; page++) {
+      const items = [];
+      for (let i = 0; i < (itemsPerPage[page] || 2); i++) {
+        const key = `${page}-${i}`;
+        const productId = selectedProducts[key];
+        const product = products.find((p) => p.id === productId);
+        const price = prices[key];
+
+        if (product && price) {
+          items.push({
+            name: product.name,
+            price: parseFloat(price),
+            image: product.image,
+          });
+        }
+      }
+
+      pages.push({
+        type: items.length <= 2 ? 1 : items.length <= 4 ? 2 : 3,
+        items: items,
+      });
+    }
+
+    const flyer = { pages: pages };
+    console.log(flyer);
+    // Here you can send the flyer data to an API or handle it as needed
+  };
+
   return (
     <>
       <Navigation />
@@ -163,7 +194,7 @@ const Page = () => {
             <ChevronLeft className="mr-2 h-4 w-4" /> Previous
           </Button>
           {currentPage === totalPages ? (
-            <Button onClick={() => console.log("Submit flyer")}>
+            <Button onClick={submitFlyer}>
               Submit Flyer
             </Button>
           ) : (
