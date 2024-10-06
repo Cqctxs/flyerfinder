@@ -99,14 +99,14 @@ export default function FlyerGrid() {
         cosineDistanceBetweenPoints(
           coordinates.latitude,
           coordinates.longitude,
-          a.seller.coordinates.lat, // Ensure correct access to latitude
-          a.seller.coordinates.lon // Ensure correct access to longitude
+          a.seller.coords.lat, // Ensure correct access to latitude
+          a.seller.coords.lon // Ensure correct access to longitude
         ) -
         cosineDistanceBetweenPoints(
           coordinates.latitude,
           coordinates.longitude,
-          b.seller.coordinates.lat, // Ensure correct access to latitude
-          b.seller.coordinates.lon // Ensure correct access to longitude
+          b.seller.coords.lat, // Ensure correct access to latitude
+          b.seller.coords.lon // Ensure correct access to longitude
         )
       );
     }
@@ -167,8 +167,8 @@ export default function FlyerGrid() {
                         cosineDistanceBetweenPoints(
                           coordinates.latitude,
                           coordinates.longitude,
-                          flyer.seller.coordinates.lat,
-                          flyer.seller.coordinates.lon
+                          flyer.seller.coords.lat,
+                          flyer.seller.coords.lon
                         ).toFixed(2)}
                       km
                     </span>
