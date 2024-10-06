@@ -190,10 +190,7 @@ const Page = () => {
               Submit Flyer
             </Button>
           ) : (
-            <Button
-              onClick={() => nextPage()}
-              disabled={page === totalPages}
-            >
+            <Button onClick={() => nextPage()} disabled={page === totalPages}>
               Next <ChevronRight className="ml-2 h-4 w-4" />
             </Button>
           )}
