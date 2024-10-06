@@ -24,7 +24,6 @@ export default function Home() {
             <li>Browse digital flyers: Easily access flyers from your favorite local businesses, all in one place.</li>
             <li>Discover exclusive deals: Uncover hidden gems and special offers you won't find anywhere else.</li>
             <li>Save paper, save trees: Reduce your environmental impact by choosing digital flyers.</li>
-            <li>Enjoy secure and verifiable flyers: Our blockchain technology ensures flyers are authentic and tamper-proof.</li>
             <li>Support local businesses: Connect with businesses in your community and discover new places to shop.</li>
           </ul>
           <div className="text-5xl mt-10">
