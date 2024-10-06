@@ -89,29 +89,31 @@ export default function FlyerGrid() {
 
   const [sortBy, setSortBy] = useState("expiryDate");
 
-  const sortedFlyers = flyers? [...flyers].sort((a, b) => {
-    if (sortBy === "expiryDate") {
-      return (
-        new Date(a.expiryDate).getTime() - new Date(b.expiryDate).getTime()
-      );
-    } else if (sortBy === "distance") {
-      return (
-        cosineDistanceBetweenPoints(
-          coordinates.latitude,
-          coordinates.longitude,
-          a.seller.coords.lat, // Ensure correct access to latitude
-          a.seller.coords.lon // Ensure correct access to longitude
-        ) -
-        cosineDistanceBetweenPoints(
-          coordinates.latitude,
-          coordinates.longitude,
-          b.seller.coords.lat, // Ensure correct access to latitude
-          b.seller.coords.lon // Ensure correct access to longitude
-        )
-      );
-    }
-    return 0;
-  }): [];
+  const sortedFlyers = flyers
+    ? [...flyers].sort((a, b) => {
+        if (sortBy === "expiryDate") {
+          return (
+            new Date(a.expiryDate).getTime() - new Date(b.expiryDate).getTime()
+          );
+        } else if (sortBy === "distance") {
+          return (
+            cosineDistanceBetweenPoints(
+              coordinates.latitude,
+              coordinates.longitude,
+              a.seller.coords.lat,
+              a.seller.coords.lon
+            ) -
+            cosineDistanceBetweenPoints(
+              coordinates.latitude,
+              coordinates.longitude,
+              b.seller.coords.lat,
+              b.seller.coords.lon
+            )
+          );
+        }
+        return 0;
+      })
+    : [];
 
   return (
     <>
@@ -148,12 +150,9 @@ export default function FlyerGrid() {
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="p-0">
-                    <Image
+                    <ProductImage
                       src={`https://api.findflyerswith.us/images/${flyer.seller.user}.png`}
                       alt={`${flyer.seller.store}'s flyer`}
-                      width={300}
-                      height={200}
-                      className="w-full h-48 object-cover"
                     />
                   </CardContent>
                   <CardFooter className="flex justify-between">
@@ -179,5 +178,24 @@ export default function FlyerGrid() {
         </>
       )}
     </>
+  );
+}
+
+function ProductImage({ src, alt }) {
+  const [imgSrc, setImgSrc] = useState(src);
+
+  const handleError = () => {
+    setImgSrc("/images/default.png");
+  };
+
+  return (
+    <Image
+      src={imgSrc}
+      alt={alt}
+      width={300}
+      height={200}
+      className="w-full h-48 object-cover"
+      onError={handleError}
+    />
   );
 }

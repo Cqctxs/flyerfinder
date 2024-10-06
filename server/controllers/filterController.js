@@ -2,7 +2,7 @@ const Flyer = require("../data/Flyer");
 
 const sortItemsByPrice = async (req, res) => {
   try {
-    const { product } = req.body;
+    const { product } = req.params;
     const currentDate = new Date();
     const items = await Flyer.aggregate([
       { $match: { validUntil: { $gte: currentDate } } },
@@ -26,7 +26,8 @@ const sortItemsByPrice = async (req, res) => {
 
 const sortItemsByLocation = async (req, res) => {
   try {
-    const { product, lat, lon } = req.body;
+    const { product } = req.params;
+    const { lat, lon } = req.body;
     const currentDate = new Date();
     const items = await Flyer.aggregate([
       { $match: { validUntil: { $gte: currentDate } } },
