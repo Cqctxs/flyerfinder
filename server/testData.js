@@ -1,9 +1,9 @@
 const seller = {
-  store: "John's Store",
-  name: "John Doe",
-  phone: "555-555-5555",
-  email: "johndoe@email.com",
-  coordinates: { lat: 43.807244912657715, lon: -79.22407422493382 },
+  user: "seanzhao2007@gmail.com",
+  pwd: "abc",
+  store: "Sean's Supermarket",
+  phone: "6473635595",
+  coords: { lat: 43.807244912657715, lng: -79.22350487614052 },
 };
 
 const flyer = {
@@ -14,12 +14,12 @@ const flyer = {
         {
           name: "Organic Apples",
           price: 4.99,
-          image: "https://localhost:3001apples.jpg",
+          image: "/images/apple.png",
         },
         {
           name: "Organic Peaches",
           price: 4.99,
-          image: "https://localhost:3001/peaches.jpg",
+          image: "/images/peaches.png",
         },
       ],
     },
