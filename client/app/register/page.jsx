@@ -21,6 +21,7 @@ const Page = () => {
   const [email, setEmail] = useState("");
   const [validEmail, setValidEmail] = useState(false);
   const [pwd, setPwd] = useState("");
+  const [store, setStore] = useState("");
   const [validPwd, setValidPwd] = useState(false);
   const [matchPwd, setMatchPwd] = useState("");
   const [validMatch, setValidMatch] = useState(false);
@@ -180,6 +181,16 @@ const Page = () => {
               )}
             </div>
             <h2 className="text-xl font-semibold">Store Information</h2>
+            <div className="space-y-2">
+              <Label htmlFor="store">Store Name</Label>
+              <Input
+                id="store"
+                type="text"
+                value={store}
+                onChange={(e) => setStore(e.target.value)}
+                placeholder="Enter your store name"
+              />
+            </div>
             <div className="space-y-2">
               <Label htmlFor="latitude">Latitude</Label>
               <Input

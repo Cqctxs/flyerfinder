@@ -83,6 +83,8 @@ const Page = () => {
   };
 
   const renderProductSelector = (i) => {
+    const selectedProduct = products.find((p) => p.name === selectedProducts[i]);
+
     return (
       <div className="space-y-2">
         {i}
@@ -102,7 +104,7 @@ const Page = () => {
             ))}
           </SelectContent>
         </Select>
-        {selectedProducts[i] !== "" && (
+        {selectedProduct !== "" && (
           <Card>
             <CardContent className="p-4">
               <Image
