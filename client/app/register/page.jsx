@@ -64,10 +64,13 @@ const Page = () => {
       formData.append("image", image);
 
       try {
-        const response = await fetch(`http://localhost:3001/image/${email}`, {
-          method: "POST",
-          body: formData,
-        });
+        const response = await fetch(
+          `https://api.findflyerswith.us/image/${email}`,
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
 
         if (response.ok) {
           setUploadSuccess("Image uploaded successfully!");
@@ -93,7 +96,7 @@ const Page = () => {
       validLongitude
     ) {
       await uploadImage();
-      const response = await fetch("http://localhost:3001/register", {
+      const response = await fetch("https://api.findflyerswith.us/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
