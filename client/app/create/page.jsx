@@ -125,6 +125,7 @@ const Page = () => {
       flyer: subFlyer,
       validUntil: validUntil,
     });
+    console.log(request);
     try {
         const response = await fetch("https://api.findflyerswith.us/flyer", {
             method: "POST",
