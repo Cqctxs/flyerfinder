@@ -18,190 +18,25 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import Navigation from "@/components/navigation";
-
-// Mock data for flyers
-const json = `{
-  "success": true,
-  "flyers": [
-  {
-      "_id": "6700dbdf79b45f34b8123392",
-      "seller": {
-        "store": "John's Store",
-        "name": "John Doe",
-        "phone": "555-555-5555",
-        "email": "johndoe@email.com",
-        "coordinates": {
-          "lat": 43.77319084068962,
-          "lon": -79.16688069831774
-        }
-      },
-      "flyer": {
-        "pages": [
-          {
-            "type": 0,
-            "items": [
-              {
-                "name": "Organic Apples",
-                "price": 2.99,
-                "image": "https://example.com/apples.jpg"
-              }
-            ]
-          },
-          {
-            "type": 0,
-            "items": [
-              {
-                "name": "Organic Bananas",
-                "price": 2.99,
-                "image": "https://example.com/apples.jpg"
-              }
-            ]
-          }
-        ]
-      },
-      "validUntil": "2024-10-10T00:00:00.000Z",
-      "__v": 0
-    },
-    {
-      "_id": "6700dc39aef25994e38ade89",
-      "seller": {
-        "store": "John's Store",
-        "name": "John Doe",
-        "phone": "555-555-5555",
-        "email": "johndoe@email.com",
-        "coordinates": {
-          "lat": 43.807244912657715,
-          "lon": -79.22407422493382
-        }
-      },
-      "flyer": {
-        "pages": [
-          {
-            "type": 1,
-            "items": [
-              {
-                "name": "Organic Apples",
-                "price": 1.99,
-                "image": "https://example.com/apples.jpg"
-              },
-              {
-                "name": "Organic Peaches",
-                "price": 2.99,
-                "image": "https://example.com/apples.jpg"
-              }
-            ]
-          },
-          {
-            "type": 0,
-            "items": [
-              {
-                "name": "Organic Bananas",
-                "price": 2.99,
-                "image": "https://example.com/apples.jpg"
-              }
-            ]
-          }
-        ]
-      },
-      "validUntil": "2024-10-10T00:00:00.000Z",
-      "__v": 0
-    },
-    {
-      "_id": "670133d0160cac7e78b6b130",
-      "seller": {
-        "store": "John's Store",
-        "name": "John Doe",
-        "phone": "555-555-5555",
-        "email": "johndoe@email.com",
-        "coordinates": {
-          "lat": 43.807244912657715,
-          "lon": -79.22407422493382
-        }
-      },
-      "flyer": {
-        "pages": [
-          {
-            "type": 1,
-            "items": [
-              {
-                "name": "Organic Apples",
-                "price": 4.99,
-                "image": "https://example.com/apples.jpg"
-              },
-              {
-                "name": "Organic Peaches",
-                "price": 4.99,
-                "image": "https://example.com/apples.jpg"
-              }
-            ]
-          },
-          {
-            "type": 0,
-            "items": [
-              {
-                "name": "Organic Bananas",
-                "price": 4.99,
-                "image": "https://example.com/apples.jpg"
-              }
-            ]
-          }
-        ]
-      },
-      "validUntil": "2024-10-10T00:00:00.000Z",
-      "__v": 0
-    },
-    {
-      "_id": "6700db91fd9bee496318c2e5",
-      "seller": {
-        "store": "John's Store",
-        "name": "John Doe",
-        "phone": "555-555-5555",
-        "email": "johndoe@email.com",
-        "coordinates": {
-          "lat": 43.77030841676703,
-          "lon": -79.18480033176169
-        }
-      },
-      "flyer": {
-        "pages": [
-          {
-            "type": 0,
-            "items": [
-              {
-                "name": "Organic Apples",
-                "price": 3.99,
-                "image": "https://example.com/apples.jpg"
-              }
-            ]
-          },
-          {
-            "type": 0,
-            "items": [
-              {
-                "name": "Organic Bananas",
-                "price": 1.99,
-                "image": "https://example.com/apples.jpg"
-              }
-            ]
-          }
-        ]
-      },
-      "validUntil": "2024-10-10T00:00:00.000Z",
-      "__v": 0
-    }
-  ]
-}`;
-// const flyers = [
-//   { id: 1, company: "SuperMart", image: "/images/apple.png", expiryDate: "2024-03-15", distance: 2.5 },
-//   { id: 2, company: "TechZone", image: "/placeholder.svg?height=200&width=300", expiryDate: "2024-03-20", distance: 1.8 },
-//   { id: 3, company: "FashionHub", image: "/placeholder.svg?height=200&width=300", expiryDate: "2024-03-18", distance: 3.2 },
-//   { id: 4, company: "HomeDecor", image: "/placeholder.svg?height=200&width=300", expiryDate: "2024-03-25", distance: 0.9 },
-//   { id: 5, company: "PetSupplies", image: "/placeholder.svg?height=200&width=300", expiryDate: "2024-03-22", distance: 4.1 },
-//   { id: 6, company: "SportsGear", image: "/placeholder.svg?height=200&width=300", expiryDate: "2024-03-17", distance: 2.7 },
-
-// ]
+import { useQuery } from "@tanstack/react-query";
 
 export default function FlyerGrid() {
+  const fetchFlyers = async () => {
+    const res = await fetch("https://api.findflyerswith.us/flyer");
+    return res.json();
+  };
+
+  const {
+    isLoading,
+    error,
+    data: response,
+  } = useQuery({
+    queryKey: ["flyer"],
+    queryFn: fetchFlyers,
+  });
+
+  const flyers = response?.flyers;
+
   const cosineDistanceBetweenPoints = (lat1, lon1, lat2, lon2) => {
     const R = 6371e3;
     const p1 = (lat1 * Math.PI) / 180;
@@ -212,26 +47,24 @@ export default function FlyerGrid() {
     const a =
       Math.sin(deltaP / 2) * Math.sin(deltaP / 2) +
       Math.cos(p1) *
-      Math.cos(p2) *
-      Math.sin(deltaLambda / 2) *
-      Math.sin(deltaLambda / 2);
+        Math.cos(p2) *
+        Math.sin(deltaLambda / 2) *
+        Math.sin(deltaLambda / 2);
     const d = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)) * R;
     return d / 1000;
   };
+
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     return date.toISOString().split("T")[0];
   };
-  const data = JSON.parse(json);
-  console.log(data);
-  const flyers = data.flyers;
 
   // Location
   const [coordinates, setCoordinates] = useState({
     latitude: null,
     longitude: null,
   });
-  const [error, setError] = useState(null);
+  const [locationError, setLocationError] = useState(null);
 
   useEffect(() => {
     const getLocation = () => {
@@ -244,20 +77,19 @@ export default function FlyerGrid() {
             });
           },
           (error) => {
-            setError(error.message);
+            setLocationError(error.message);
           }
         );
       } else {
-        setError("Geolocation is not supported by this browser.");
+        setLocationError("Geolocation is not supported by this browser.");
       }
     };
     getLocation();
   }, []);
-  console.log(coordinates);
 
   const [sortBy, setSortBy] = useState("expiryDate");
 
-  const sortedFlyers = [...flyers].sort((a, b) => {
+  const sortedFlyers = flyers? [...flyers].sort((a, b) => {
     if (sortBy === "expiryDate") {
       return (
         new Date(a.expiryDate).getTime() - new Date(b.expiryDate).getTime()
@@ -279,59 +111,74 @@ export default function FlyerGrid() {
       );
     }
     return 0;
-  });
+  }): [];
 
   return (
     <>
       <Navigation />
-      <div className="flex justify-between mb-4 px-10">
-        <h1 className="font-advercase text-4xl font-semibold">Flyers</h1>
-        <Select onValueChange={(value) => setSortBy(value)}>
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Sort by" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="expiryDate">Expiry Date</SelectItem>
-            <SelectItem value="distance">Distance</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-10">
-        {sortedFlyers.map((flyer) => (
-          <Link href={`/flyer/${flyer._id}`}>
-            <Card key={flyer._id} className="overflow-hidden">
-              <CardHeader>
-                <CardTitle className="text-2xl">{flyer.seller.store}</CardTitle>
-              </CardHeader>
-              <CardContent className="p-0">
-                <Image
-                  src={flyer.image}
-                  alt={`${flyer.store}'s flyer`}
-                  width={300}
-                  height={200}
-                  className="w-full h-48 object-cover"
-                />
-              </CardContent>
-              <CardFooter className="flex justify-between">
-                <span className="text-sm text-gray-400">
-                  Expires: {formatDate(flyer.validUntil)}
-                </span>
-                <span className="text-sm text-gray-400">
-                  Distance:{" "}
-                  {coordinates.latitude &&
-                    cosineDistanceBetweenPoints(
-                      coordinates.latitude,
-                      coordinates.longitude,
-                      flyer.seller.coordinates.lat,
-                      flyer.seller.coordinates.lon
-                    ).toFixed(2)}
-                  km
-                </span>
-              </CardFooter>
-            </Card>
-          </Link>
-        ))}
-      </div>
+      {isLoading ? (
+        <div className="flex justify-center items-center h-screen">
+          <h1>Loading...</h1>
+        </div>
+      ) : error ? (
+        <div className="flex justify-center items-center h-screen">
+          <p className="text-red-500">{error.message}</p>
+        </div>
+      ) : (
+        <>
+        {console.log(flyers)}
+          <div className="flex justify-between mb-4 px-10">
+            <h1 className="font-advercase text-4xl font-semibold">Flyers</h1>
+            <Select onValueChange={(value) => setSortBy(value)}>
+              <SelectTrigger className="w-[180px]">
+                <SelectValue placeholder="Sort by" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="expiryDate">Expiry Date</SelectItem>
+                <SelectItem value="distance">Distance</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-10">
+            {sortedFlyers.map((flyer) => (
+              <Link key={flyer._id} href={`/flyer/${flyer._id}`}>
+                <Card className="overflow-hidden">
+                  <CardHeader>
+                    <CardTitle className="text-2xl">
+                      {flyer.seller.store}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="p-0">
+                    <Image
+                      // src={flyer.flyer.pages[0].items[0].image}
+                      alt={`${flyer.seller.store}'s flyer`}
+                      width={300}
+                      height={200}
+                      className="w-full h-48 object-cover"
+                    />
+                  </CardContent>
+                  <CardFooter className="flex justify-between">
+                    <span className="text-sm text-gray-400">
+                      Expires: {formatDate(flyer.validUntil)}
+                    </span>
+                    <span className="text-sm text-gray-400">
+                      Distance:{" "}
+                      {coordinates.latitude &&
+                        cosineDistanceBetweenPoints(
+                          coordinates.latitude,
+                          coordinates.longitude,
+                          flyer.seller.coordinates.lat,
+                          flyer.seller.coordinates.lon
+                        ).toFixed(2)}
+                      km
+                    </span>
+                  </CardFooter>
+                </Card>
+              </Link>
+            ))}
+          </div>
+        </>
+      )}
     </>
   );
 }
