@@ -14,7 +14,7 @@ const PORT = process.env.PORT || 3001;
 
 // CORS configuration
 const corsOptions = {
-  origin: ["http://localhost:3000", "https://findflyerswith.us"],
+  origin: "https://findflyerswith.us",
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   allowedHeaders: "Content-Type,Authorization",
   credentials: true, // Allow credentials
